@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <record id="view_users_form" model="ir.ui.view">
+      <field name="name">res.users.form</field>
+      <field name="model">res.users</field>
+      <field name="inherit_id" ref="base.view_users_form" />
+      <field name="arch" type="xml">
+        <notebook colspan="4" position="inside">
+          <page string="OTP">
+            <group>
+              <field name="otp_secret" />
+              <field name="otp_type" />
+              <field name="otp_counter" attrs="{'invisible':[('otp_type', '==', 'time')]}" />
+              <field name="otp_period" attrs="{'invisible':[('otp_type', '==', 'count')]}" />
+              <field name="otp_digits" />
+              <field name="otp_uri" />
+              <field name="otp_qrcode" widget="image" nolabel="1" />
+            </group>
+          </page>
+        </notebook>
+      </field>
+    </record>
+    <record id="view_users_form_simple_modif" model="ir.ui.view">
+      <field name="name">res.users.preferences.form.otp</field>
+      <field name="model">res.users</field>
+      <field name="inherit_id" ref="base.view_users_form_simple_modif" />
+      <field name="arch" type="xml">
+        <footer position="before">
+          <group string="OTP" name="otp">
+            <field name="otp_qrcode" widget="image" nolabel="1" />
+            Android<a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android App</a>
+            Iphone<a href="https://itunes.apple.com/se/app/google-authenticator/id388497605?mt=8">Iphone App</a>
+            <field name="otp_uri" nolabel="1" />
+          </group>
+        </footer>
+      </field>
+    </record>
+  </data>
+</openerp>
