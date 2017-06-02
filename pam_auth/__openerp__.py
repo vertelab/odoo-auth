@@ -21,17 +21,30 @@
 
 
 {
-    'name': 'OTP Authentification',
+    'name': 'PAM Authentification',
     'version': '2.0',
     'category': 'Tools',
     'description': """
-Allow users to login through OTP
-================================
+        Allow PAM-authentication systems to use
+        Odoo user configuration
+        
+https://www.privacyidea.org/
+http://pam-python.sourceforge.net/doc/html/
+
+
+https://www.privacyidea.org/how-to-install-privacyidea-otp-server-on-ubuntu-14-04/
+
+https://www.privacyidea.org/ssh-keys-and-otp-really-strong-two-factor-authentication/
+https://www.howtoforge.com/tutorial/ssh-key-management-with-privacyidea/
+https://launchpad.net/~privacyidea/+archive/ubuntu/privacyidea
+https://www.linux.com/learn/how-set-2-factor-authentication-login-and-sudo
+
+
 """,
     'author': 'Vertel AB',
     'maintainer': 'Vertel AB',
     'website': 'http://vertel.se',
-    'depends': ['base', 'web','auth_signup'],
+    'depends': ['base', 'web'],
     'data': [
         'res_users.xml',
     ],

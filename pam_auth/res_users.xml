@@ -40,8 +40,8 @@
       </field>
     </record>
     <!-- login form -->
-    <template id="login" inherit_id="web.login">
-      <xpath expr="//div[@class='form-group field-password']" position="before">
+    <template id="login" inherit="web.login">
+      <xpath expr="//div[@class='field-password']" position="before">
         <div class="form-group field-otp-code">
           <label for="otp_code" class="control-label">Verification code</label>
           <input type="text" name="otp_code" id="otp_code" class="form-control" required="required" t-att-autofocus="'autofocus' if login else None" />
@@ -54,7 +54,7 @@
     
     
             <!-- Email template for reset password -->
-        <record id="auth_signup.reset_password_email" model="email.template">
+        <record id="reset_password_email" model="email.template">
             <field name="name">Reset Password</field>
             <field name="model_id" ref="base.model_res_users"/>
             <field name="email_from"><![CDATA["${object.company_id.name|safe}" <${(object.company_id.email or user.email)|safe}>]]></field>
@@ -69,7 +69,7 @@
         </record>
 
         <!-- Email template for new users -->
-        <record id="auth_signup.set_password_email" model="email.template">
+        <record id="set_password_email" model="email.template">
             <field name="name">Odoo Enterprise Connection</field>
             <field name="model_id" ref="base.model_res_users"/>
             <field name="email_from"><![CDATA["${object.company_id.name|safe}" <${(object.company_id.email or user.email)|safe}>]]></field>
