@@ -41,7 +41,7 @@ class res_users(models.Model):
     @api.model
     def _otp_secret(self):
         return pyotp.random_base32()
-    otp_secret = fields.Char(string="Secret",size=16,help='16 character base32 secret',default=_otp_secret)
+    otp_secret = fields.Char(string="Secret",size=16,help='16 character base32 secret',default=lambda s: pyotp.random_base32())
     otp_counter = fields.Integer(string="Counter",default=1)
     otp_digits = fields.Integer(string="Digits",default=6,help="Length of the PIN")
     otp_period = fields.Integer(string="Period",default=30,help="Number seconds PIN is active")
@@ -67,9 +67,8 @@ class res_users(models.Model):
         self.otp_uri = provisioning_uri + '&issuer=%s' % self.company_id.name
     otp_uri = fields.Char(compute='_otp_uri',string="URI")
 
-    def check_otp(self,cr,uid,password):
+    def check_otp(self,cr,uid,password,otp_code):
         user = self.pool['res.users'].browse(cr,uid,uid)
-        otp_code = request.params.get('otp_code')
         if user.otp_type == 'time':
             totp = pyotp.TOTP(user.otp_secret)
             return totp.verify(otp_code)
@@ -82,11 +81,27 @@ class res_users(models.Model):
         return False
 
     def check_credentials(self, cr, uid, password):
-        _logger.warn('check cred override %s | otp %s other %s' % (password == tools.config.get('admin_passwd',False),self.check_otp(cr,uid,password),super(res_users, self).check_credentials(cr, uid, password)  ))
+        _logger.warn('check cred override %s | otp %s other %s' % (password == tools.config.get('admin_passwd',False),self.check_otp(cr,uid,password,request.params.get('otp_code')),super(res_users, self).check_credentials(cr, uid, password)  ))
         if password == tools.config.get('admin_passwd',False):  # admin_passwd overrides 
             return 
         else:
-            return self.check_otp(cr,uid,password) and super(res_users, self).check_credentials(cr, uid, password)
+            return self.check_otp(cr,uid,password,request.params.get('otp_code')) and super(res_users, self).check_credentials(cr, uid, password)
+            
+    def remote_check_otp(self,cr,uid,password,otp_code):
+        otp_server = openerp.tools.config.get('otp_server',False)
+        if otp_server:
+            self.passwd_port = get_config('otp_port','Server port is missing!')
+            self.passwd_dbname = get_config('otp_dbname','Databasename is missing')
+            self.passwd_user   = get_config('otp_user','Username is missing')
+            self.passwd_passwd = get_config('otp_passwd','Password is missing')
+            try:
+                self.sock_common = xmlrpclib.ServerProxy('%s:%s/xmlrpc/2/common' % (self.passwd_server, self.passwd_port))
+                self.uid = self.sock_common.authenticate(self.passwd_dbname, self.passwd_user, self.passwd_passwd,{})
+                self.sock = xmlrpclib.ServerProxy('%s:%s/xmlrpc/2/object' % (self.passwd_server, self.passwd_port), allow_none=True)
+            except xmlrpclib.Error as err:
+                raise Warning(_("%s (server %s, db %s, user %s, pw %s)" % (err, self.passwd_server, self.passwd_dbname, self.passwd_user, self.passwd_passwd)))
+            return self.sock.execute_kw(self.passwd_dbname, self.uid, self.passwd_passwd,model, 'check_otp', [password,otp_code])
+        pass
 
 #----------------------------------------------------------
 # OpenERP Web web Controllers
@@ -143,8 +158,6 @@ def ensure_db(redirect='/web/database/selector'):
 
     request.session.db = db
 
-
-
 class Home(http.Controller):
 
 
@@ -170,6 +183,7 @@ class Home(http.Controller):
 
         if request.httprequest.method == 'POST':
             old_uid = request.uid
+            # remote_check_otp ??? do we need this?
             uid = request.session.authenticate(request.session.db, request.params['login'], request.params['password'])
             if uid is not False:
                 return http.redirect_with_hash(redirect)

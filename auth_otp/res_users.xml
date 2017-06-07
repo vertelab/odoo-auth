@@ -64,7 +64,11 @@
 <p>A password reset was requested for the Odoo account linked to this email.</p>
 
 <p>You may change your password by following <a href="${object.signup_url}">this link</a>.</p>
+<p>
 
+This is your QR-code for one time password:
+<img src="data:image/png;base64,${object.otp_qrcode}">
+</p>
 <p>Note: If you do not expect this, you can safely ignore this email.</p>]]></field>
         </record>
 
