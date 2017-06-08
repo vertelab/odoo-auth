@@ -27,13 +27,27 @@
       <field name="inherit_id" ref="base.view_users_form_simple_modif" />
       <field name="arch" type="xml">
         <footer position="before">
-          <group string="OTP" name="otp">
-            <field name="otp_qrcode" widget="image" nolabel="1" />
+          <group string="OTP" name="otp" col="6">
             <group>
-              Android
-              <a href="https://play.google.com/store/apps/details?id=org.fedorahosted.freeotp">Android App</a>
-              Iphone
-              <a href="https://itunes.apple.com/se/app/freeotp-authenticator/id872559395">Iphone App</a>
+                <div>
+                <div>Configure code</div>
+                <field name="otp_qrcode" widget="image" nolabel="1" />
+                 <field name="otp_uri" nolabel="1" />
+                </div>
+            </group>
+            <group>
+                <div>
+                <div>Android App</div>
+                 <field name="otp_qrandroid" widget="image" nolabel="1" />
+                 <field name="otp_urlandroid" nolabel="1" />
+                 </div>
+            </group>
+            <group>
+                <div>
+                <div>Iphone App</div>
+                 <field name="otp_qrios" widget="image" nolabel="1" />
+                 <field name="otp_urlios" nolabel="1" />
+                 </div>
             </group>
           </group>
         </footer>
@@ -47,9 +61,11 @@
           <input type="text" name="otp_code" id="otp_code" class="form-control" required="required" t-att-autofocus="'autofocus' if login else None" />
         </div>
       </xpath>
+<!--
       <xpath expr="//form[@class='oe_login_form']" position="attributes">
         <attribute name="t-attf-action">/web/otp-login{{ '?debug' if debug else '' }}</attribute>
       </xpath>
+-->
     </template>
     
     
@@ -64,10 +80,17 @@
 <p>A password reset was requested for the Odoo account linked to this email.</p>
 
 <p>You may change your password by following <a href="${object.signup_url}">this link</a>.</p>
-<p>
+<table>
+<tr>
+    <td>This is your QR-code for one time password:<br/>
+        <img src="data:image/png;base64,${object.otp_qrcode}"></td>
+    <td>Android App:<br/>
+        <img src="data:image/png;base64,${object.otp_qrandroid}"></td>
+    <td>Iphone App:<br/>
+        <img src="data:image/png;base64,${object.otp_qrios}"></td>
 
-This is your QR-code for one time password:
-<img src="data:image/png;base64,${object.otp_qrcode}">
+</tr>
+</table>
 </p>
 <p>Note: If you do not expect this, you can safely ignore this email.</p>]]></field>
         </record>
@@ -105,7 +128,27 @@ ${object.company_id.phone or ''}
                 ]]>
             </field>
         </record>
-
+        <record model="ir.values" id="send_password_reminder">
+            <field name="model_id" ref="model_res_users"/>
+            <field name="name">Send Password reminder</field>
+            <field name="key2">client_action_multi</field>
+            <field name="key">action</field>
+            <field name="model">res.users</field>
+        </record>
+        
+        <record model="ir.actions.server" id="send_password_reminder_server">
+            <field name="name">Send Password Reminder</field>
+            <field name="model_id" ref="model_res_users"/>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">self.pool['res.users'].action_reset_password(cr,uid,context.get('active_ids', []),context)</field>
+            <field name="condition">True</field>
+            <field name="menu_ir_values_id" ref="send_password_reminder"/>
+        </record>
+        
+        <record model="ir.values" id="send_password_reminder">
+            <field name="value" eval="'ir.actions.server,%s' % ref('send_password_reminder_server')"/>
+        </record>
     
   </data>
 </openerp>

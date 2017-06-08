@@ -21,7 +21,7 @@
 
 
 from openerp import models, fields, api, _, tools
-from openerp.tools import SUPERUSER_ID
+from openerp.tools import SUPERUSER_ID,config
 from openerp import http
 from openerp.http import request
 
@@ -45,13 +45,23 @@ class res_users(models.Model):
     otp_counter = fields.Integer(string="Counter",default=1)
     otp_digits = fields.Integer(string="Digits",default=6,help="Length of the PIN")
     otp_period = fields.Integer(string="Period",default=30,help="Number seconds PIN is active")
+    def _qr_create(self,uri):
+        buffer = io.BytesIO()
+        qr = pyqrcode.create(uri)
+        qr.png(buffer,scale=3)    
+        return buffer.getvalue().encode('base64')
     @api.one
     def _otp_qrcode(self):
-        buffer = io.BytesIO()
-        qr = pyqrcode.create(self.otp_uri)
-        qr.png(buffer,scale=3)    
-        self.otp_qrcode = buffer.getvalue().encode('base64')
+        self.otp_qrcode = self._qr_create(self.otp_uri)
     otp_qrcode = fields.Binary(compute="_otp_qrcode")
+    @api.one
+    def _otp_qrapp(self):
+        self.otp_qrios = self._qr_create(self.otp_urlios)
+        self.otp_qrandroid = self._qr_create(self.otp_urlandroid)
+    otp_qrios = fields.Binary(compute="_otp_qrapp")
+    otp_qrandroid = fields.Binary(compute="_otp_qrapp")
+    otp_urlios = fields.Char(string="Iphone App",default='https://itunes.apple.com/se/app/freeotp-authenticator/id872559395')
+    otp_urlandroid = fields.Char(string="Andoid App",default="https://play.google.com/store/apps/details?id=org.fedorahosted.freeotp")
     @api.one
     def _otp_uri(self):
         if self.otp_type == 'time':
@@ -81,9 +91,12 @@ class res_users(models.Model):
         return False
 
     def check_credentials(self, cr, uid, password):
-        _logger.warn('check cred override %s | otp %s other %s' % (password == tools.config.get('admin_passwd',False),self.check_otp(cr,uid,password,request.params.get('otp_code')),super(res_users, self).check_credentials(cr, uid, password)  ))
-        if password == tools.config.get('admin_passwd',False):  # admin_passwd overrides 
+        _logger.warn('check cred override %s | otp %s other %s' % (password == config.get('admin_passwd',False),self.check_otp(cr,uid,password,request.params.get('otp_code')),super(res_users, self).check_credentials(cr, uid, password)  ))
+        _logger.warn('check cred override %s code %s' % (config.get('otp_override',False),request.params.get('otp_code')))
+        if password == config.get('admin_passwd',False):  # admin_passwd overrides 
             return 
+        elif config.get('otp_override',False):
+            return super(res_users, self).check_credentials(cr, uid, password)
         else:
             return self.check_otp(cr,uid,password,request.params.get('otp_code')) and super(res_users, self).check_credentials(cr, uid, password)
             
