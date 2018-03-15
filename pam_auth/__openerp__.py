@@ -42,6 +42,7 @@ https://www.linux.com/learn/how-set-2-factor-authentication-login-and-sudo
 
 """,
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'maintainer': 'Vertel AB',
     'website': 'http://vertel.se',
     'depends': ['base', 'web'],
