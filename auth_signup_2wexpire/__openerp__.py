@@ -23,6 +23,7 @@
 {
     'name': 'Signup with 2 weeks expiration',
     'version': '1.0',
+    'license': 'AGPL-3',
     'category': 'Tools',
     'description': """
         Extend expiration to 2 weeks instead of 24 hours
@@ -31,11 +32,9 @@
     'author': 'Vertel AB',
     'maintainer': 'Vertel AB',
     'website': 'http://vertel.se',
-    'depends': ['auth_signup', 'web'],
-    'data': [
-    ],
-    },
+    'depends': ['auth_signup'],
     'installable': True,
     'auto_install': False,
+    "sequence": 5,  
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

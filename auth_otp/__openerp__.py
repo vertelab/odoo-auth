@@ -70,6 +70,6 @@ and in RFC 6238 (TOTP: Time-Based One-Time Password Algorithm).
     },
     'installable': True,
     'auto_install': False, 
-    "sequence": 5,  # To be installed early
+    # ~ "sequence": 5,  # To be installed early
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
