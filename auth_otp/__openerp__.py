@@ -57,6 +57,7 @@ and in RFC 6238 (TOTP: Time-Based One-Time Password Algorithm).
 
 """,
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'maintainer': 'Vertel AB',
     'website': 'http://vertel.se',
     'depends': ['auth_signup'],
