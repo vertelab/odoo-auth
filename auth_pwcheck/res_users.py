@@ -24,6 +24,7 @@ from openerp import models, fields, api, _, tools
 from openerp.tools import SUPERUSER_ID,config
 from openerp import http
 from openerp.http import request
+from openerp.exceptions import except_orm, Warning, RedirectWarning
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -33,12 +34,40 @@ from zxcvbn import zxcvbn
 class res_users(models.Model):
     _inherit = 'res.users'
 
-    @api.one
-    def change_password(old_passwd, new_passwd):
-        result = zxcvbn(new_passwd)
-        if result.get('score',0) < 3:
-            raise Warning('\n'.join(result['feedback']['suggestions']+[_('Crack time'),result['crack_times_display']['offline_fast_hashing_1e10_per_second']]))
+    @api.model
+    def change_password(self,old_passwd, new_passwd):
+        _logger.warn('before chanmge_password %s' % self)
         super(res_users, self).change_password(old_passwd,new_passwd)
+        # ~ result = zxcvbn(new_passwd)
+        # ~ _logger.warn('%s' % result)
+        # ~ if result.get('score',0) < 3:
+            # ~ raise Warning('\n'.join(result['feedback']['suggestions']+[_('Crack time'),result['crack_times_display']['offline_fast_hashing_1e10_per_second']]))
+        
+class change_password_user(models.TransientModel):
+    _inherit = 'change.password.user'
+
+    @api.multi
+    def change_password_button(self):
+        for line in self:
+            result = zxcvbn(line.new_passwd)
+            _logger.warn('%s' % result)
+            if result.get('score',0) < 3:
+                raise Warning('\n'.join([_('Password too weak')]+result['feedback']['suggestions']+[_('Crack time %s') % result['crack_times_display']['offline_fast_hashing_1e10_per_second']]))
+        super(change_password_user,self).change_password_button()
+
+
+# ~ class change_password_wizard(models.TransientModel):
+    # ~ _inherit = "change.password.wizard"
+  
+    # ~ @api.multi
+    # ~ def change_password_button(self):
+        # ~ for line in self:
+            # ~ result = zxcvbn(line.new_passwd)
+            # ~ _logger.warn('%s' % result)
+            # ~ if result.get('score',0) < 3:
+                # ~ raise Warning('\n'.join(result['feedback']['suggestions']+[_('Crack time'),result['crack_times_display']['offline_fast_hashing_1e10_per_second']]))
+        # ~ super(change_password_user,self).change_password_button()
+        
 
 #----------------------------------------------------------
 # OpenERP Web web Controllers
