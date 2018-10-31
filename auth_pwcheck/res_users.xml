@@ -1,69 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-  <data>
-      
-              <!-- change password wizard -->
+    <data>
+        <!-- change password wizard -->
         <record id="change_password_wizard_view" model="ir.ui.view">
             <field name="name">Change Password</field>
             <field name="model">change.password.wizard</field>
             <field name="arch" type="xml">
                 <form string="Change Password">
-                    <field name="user_ids"/>
+                    <field name="user_ids" />
                     <footer>
-                        <button string="Change Password" name="change_password_button" type="object" class="oe_highlight"/>
+                        <button string="Change Password" name="change_password_button" type="object" class="oe_highlight" />
                         or
                         <button string="Cancel" class="oe_link" special="cancel" />
                     </footer>
                 </form>
             </field>
         </record>
-
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-    <template id="auth_pwcheck_css" inherit_id="website.assets_frontend">
-        <xpath expr="." position="inside">
-            <link href="/auth_pwcheck/static/src/css/auth_pwcheck.css" rel="stylesheet" />
-        </xpath>
-        <xpath expr="." position="inside">
-            <script type="text/javascript" src="/auth_pwcheck/static/src/js/auth_pwcheck.js" />
-        </xpath>
-    </template>
-
+        <template id="auth_pwcheck_css" inherit_id="website.assets_frontend">
+            <xpath expr="." position="inside">
+                <link href="/auth_pwcheck/static/src/css/auth_pwcheck.css" rel="stylesheet" />
+            </xpath>
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/auth_pwcheck/static/src/js/auth_pwcheck.js" />
+            </xpath>
+        </template>
         <template id="auth_pwcheck.form">
             <t t-call="website.layout">
                 <t t-set="additional_title">Password - Check</t>
                 <div id="wrap">
                     <div class="container oe_website_sale">
-                        
-                    
-
-<section>
-        <label for="password">Enter password</label>
-        <input type="password" name="password" id="password"/>
-    
-        <meter max="4" id="password-strength-meter"></meter>
-        <p id="password-strength-text"></p>
-</section>
-
-    
-                        
-                        
+                        <section>
+                            <label for="password">Enter password</label>
+                            <input type="password" name="password" id="password" />
+                            <meter id="password-strength-meter" max="4" /><p id="password-strength-score" style="display: inline; margin-left: 15px;"/>
+                            <p id="password-strength-text" />
+                        </section>
                     </div>
                     <div class="oe_structure" />
                 </div>
             </t>
         </template>
-
-
-    
-  </data>
+    </data>
 </openerp>
