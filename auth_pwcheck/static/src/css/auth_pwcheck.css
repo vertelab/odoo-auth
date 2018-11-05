@@ -1,5 +1,6 @@
 
 
+/*
 @import url(https://fonts.googleapis.com/css?family=Signika:400,700|Courgette);
 
 * {
@@ -9,9 +10,9 @@
 body {
     padding: 2.5em 2em 0em;
     background: #f5f7f9;
-        font-size: 1.5em;
-        color: #346;
-        font-family: Signika, -apple-system, sans-serif;
+    font-size: 1.5em;
+    color: #346;
+    font-family: Signika, -apple-system, sans-serif;
 }
 
 section {
@@ -38,17 +39,18 @@ input:hover, input:focus {
     transition: all .5s linear;
     box-shadow: inset 0px 0px 10px #ccc;
 }
+*/
 
 meter {
     /* Reset the default appearance */
     -webkit-appearance: none;
        -moz-appearance: none;
             appearance: none;
-            
+
     margin: 0 auto 1em;
     width: 100%;
     height: .5em;
-    
+
     /* Applicable only to Firefox */
     background: none;
     background-color: rgba(0,0,0,0.1);
