@@ -70,7 +70,7 @@
     
     
             <!-- Email template for reset password -->
-        <record id="auth_signup.reset_password_email" model="email.template">
+        <record id="auth_signup.reset_password_email" model="mail.template">
             <field name="name">Reset Password</field>
             <field name="model_id" ref="base.model_res_users"/>
             <field name="email_from"><![CDATA["${object.company_id.name|safe}" <${(object.company_id.email or user.email)|safe}>]]></field>
@@ -96,7 +96,7 @@
         </record>
 
         <!-- Email template for new users -->
-        <record id="auth_signup.set_password_email" model="email.template">
+        <record id="auth_signup.set_password_email" model="mail.template">
             <field name="name">Odoo Enterprise Connection</field>
             <field name="model_id" ref="base.model_res_users"/>
             <field name="email_from"><![CDATA["${object.company_id.name|safe}" <${(object.company_id.email or user.email)|safe}>]]></field>

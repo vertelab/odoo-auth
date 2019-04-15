@@ -20,10 +20,10 @@
 ##############################################################################
 
 
-from openerp import models, fields, api, _, tools
-from openerp.tools import SUPERUSER_ID,config
-from openerp import http
-from openerp.http import request
+from odoo import models, fields, api, _, tools
+from odoo.tools import SUPERUSER_ID,config
+from odoo import http
+from odoo.http import request
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -77,8 +77,11 @@ class res_users(models.Model):
         self.otp_uri = provisioning_uri + '&issuer=%s' % self.company_id.name
     otp_uri = fields.Char(compute='_otp_uri',string="URI")
 
-    def check_otp(self,cr,uid,password,otp_code):
-        user = self.pool['res.users'].browse(cr,uid,uid)
+
+
+    @api.model
+    def check_otp(self,password,otp_code):
+        user = self.env['res.users'].browse(self.env.uid)
         if user.otp_type == 'time':
             totp = pyotp.TOTP(user.otp_secret)
             return totp.verify(otp_code)
@@ -86,21 +89,22 @@ class res_users(models.Model):
             hotp = pyotp.HOTP(user.otp_secret)
             for c in range(user.otp_counter-5,user.otp_counter+5):
                 if c > 0 and hotp.verify(otp_code,c):
-                    self.pool.get('res.users').write(cr,SUPERUSER_ID,uid,{'otp_counter': c+ 1})
+                    user.otp_counter = c+ 1
                     return True
         return False
 
-    def check_credentials(self, cr, uid, password):
-        _logger.warn('check cred override %s | otp %s other %s' % (password == config.get('admin_passwd',False),self.check_otp(cr,uid,password,request.params.get('otp_code')),super(res_users, self).check_credentials(cr, uid, password)  ))
+    
+    def check_credentials(self, password):
+        _logger.warn('check cred override %s | otp %s other %s' % (password == config.get('admin_passwd',False),self.check_otp(password,request.params.get('otp_code')),super(res_users, self).check_credentials(password)  ))
         _logger.warn('check cred override %s code %s' % (config.get('otp_override',False),request.params.get('otp_code')))
         if password == config.get('admin_passwd',False):  # admin_passwd overrides 
             return 
         elif config.get('otp_override',False):
-            return super(res_users, self).check_credentials(cr, uid, password)
+            return super(res_users, self).check_credentials(password)
         else:
-            return self.check_otp(cr,uid,password,request.params.get('otp_code')) and super(res_users, self).check_credentials(cr, uid, password)
+            return self.check_otp(password,request.params.get('otp_code')) and super(res_users, self).check_credentials( password)
             
-    def remote_check_otp(self,cr,uid,password,otp_code):
+    def remote_check_otp(self,password,otp_code):
         otp_server = openerp.tools.config.get('otp_server',False)
         if otp_server:
             self.passwd_port = get_config('otp_port','Server port is missing!')
