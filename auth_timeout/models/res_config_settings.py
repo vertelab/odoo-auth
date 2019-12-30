@@ -24,7 +24,7 @@ from odoo import api, fields, models
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    auth_timeout_tries = fields.Integer(string='Timeout max tries',help="Number of tries", default=5)
+    auth_timeout_tries = fields.Integer(string='Timeout max tries',help="Number of tries before cooldown goes into effect", default=5)
     auth_timeout_time = fields.Integer(string='Timeout cooldown time',help="Time in seconds", default=300)
         
     @api.model

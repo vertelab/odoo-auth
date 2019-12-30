@@ -24,7 +24,7 @@
     'version': '12.0.1',
     'category': 'other',
     'license': 'AGPL-3',
-    'summary': 'Adds a simple timeout for users after repeated failed logins.',
+    'summary': 'Adds a simple timeout for users after repeated failed logins in too short a time.',
     'description': """""",
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
