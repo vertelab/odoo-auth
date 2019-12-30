@@ -25,7 +25,7 @@
     'category': 'other',
     'license': 'AGPL-3',
     'summary': 'Adds a simple timeout for users after repeated failed logins in too short a time.',
-    'description': """""",
+    'description': """Two new settings are added under Global Settings > Users > Login timeout.""",
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['base_setup', 'auth_signup'],
