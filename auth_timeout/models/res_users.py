@@ -45,6 +45,9 @@ class ResUsers(models.Model):
 				self.sudo().no_fail = 0
 			else:
 				# if timeout still active, refuse access
+				# There is no use trying to add to n.o. failed logins since an exception 
+				# is raised and the pointer is rolled back. We could create a new pointer
+				# similar to how we do it later if it is really neccessary.
 				raise AccessDenied()
 
 		# try login
