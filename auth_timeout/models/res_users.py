@@ -39,7 +39,7 @@ class ResUsers(models.Model):
 		time_now = datetime.datetime.now()
 
 		# timeout check
-		if self.no_fail >= max_tries:
+		if self.no_fail >= max_tries and self.last_fail:
 			if (time_now - self.last_fail) > timeout:
 				# timeout completed, reset tries.
 				self.sudo().no_fail = 0
