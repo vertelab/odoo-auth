@@ -19,7 +19,6 @@
             <field name="arch" type="xml">
                 <form string="Access Rights">
                     <group>
-<!--                        options="{'no_quick_create':True,'no_create_edit':True,'no_open': True,}"-->
                         <field name="group_id" required="1"/>
                     </group>
                     <group>

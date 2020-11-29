@@ -11,7 +11,7 @@ class HREmployee(models.Model):
     def _set_user_rights(self):
         for rec in self:
             if rec.user_id:
-                user_groups = rec.env['res.groups'].search([('users', 'in', rec.user_id.id)])
+                user_groups = rec.env['res.groups'].search([('users', 'in', rec.user_id.id), ('name', 'ilike', 'DAFA')])
                 for _rec in user_groups:
                     rec.user_rights = _rec.model_access.ids
 
@@ -19,7 +19,7 @@ class HREmployee(models.Model):
 class UserAccessRight(models.TransientModel):
     _name = 'hr.employee.user.right'
 
-    group_id = fields.Many2one('res.groups', string="Group")
+    group_id = fields.Many2one('res.groups', string="Group", domain=[('name', 'ilike', 'DAFA')])
 
     model_access = fields.Many2many('ir.model.access', string="Access Rights")
 
