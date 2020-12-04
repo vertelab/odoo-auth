@@ -52,7 +52,3 @@ class UserAccessRight(models.TransientModel):
                             })
                 else:
                     raise ValidationError(_('Employee has no related user'))
-
-
-
-
