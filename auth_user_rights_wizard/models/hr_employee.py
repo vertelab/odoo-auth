@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 class HREmployee(models.Model):
     _inherit = 'hr.employee'
 
-    user_groups = fields.Many2many('res.groups', string="User Rights", compute='_set_user_rights')
+    user_groups = fields.Many2many('res.groups', string="User Groups", compute='_set_user_rights')
 
     @api.depends('user_id')
     def _set_user_rights(self):
@@ -39,10 +39,16 @@ class UserAccessRight(models.TransientModel):
         if active_ids:
             for _id in active_ids:
                 employee_user_id = self.env['hr.employee'].search([('id', '=', _id)])
+                if not employee_user_id.user_id:
+                    new_user_id = self.env['res.users'].sudo().create({
+                        'name': employee_user_id.name,
+                        'login': employee_user_id.work_email,
+                        'email': employee_user_id.work_email,
+                        "notification_type": "email",
+                    })
+                    employee_user_id.user_id = new_user_id.id
                 if employee_user_id.user_id:
                     for group_rec in self.group_id:
                         group_rec.sudo().write({
                             'users': [(4, employee_user_id.user_id.id)]
                         })
-                else:
-                    raise ValidationError(_('Employee has no related user'))

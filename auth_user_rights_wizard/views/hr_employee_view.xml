@@ -12,6 +12,17 @@
             </field>
         </record>
 
+        <record id="view_access_right_hr_tree" model="ir.ui.view">
+            <field name="name">hr.employee.tree</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+                <field name="parent_id" position="after">
+                    <field name="user_groups" widget="many2many_tags"/>
+                </field>
+            </field>
+        </record>
+
 
         <record id="view_access_right_wizard" model="ir.ui.view">
             <field name="name">hr.employee.user.right.form</field>
