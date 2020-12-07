@@ -21,19 +21,7 @@
                     <group>
                         <field name="employee_id" invisible="1"/>
                         <field name="user_groups" readonly="1" widget="many2many_tags"/>
-                        <field name="group_id" required="1" widget="many2many_tags"/>
-                    </group>
-                    <group>
-                        <field name="model_access" widget='one2many' nolabel="1">
-                            <tree editable="top">
-                                <field name="name"/>
-                                <field name="model_id"/>
-                                <field name="perm_read"/>
-                                <field name="perm_write"/>
-                                <field name="perm_create"/>
-                                <field name="perm_unlink"/>
-                            </tree>
-                        </field>
+                        <field name="group_id" required="1" widget="many2many_tags" options="{'no_create': True, 'no_open': True}"/>
                     </group>
                     <footer>
                         <button string="Assign" type="object" name="action_assign_rights" class="btn-primary" />
