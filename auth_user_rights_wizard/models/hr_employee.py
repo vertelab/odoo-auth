@@ -52,3 +52,4 @@ class UserAccessRight(models.TransientModel):
                         group_rec.sudo().write({
                             'users': [(4, employee_user_id.user_id.id)]
                         })
+
