@@ -21,7 +21,7 @@
 
 {
     'name': 'Auth User Rights Wizard',
-    'version': '12.0.5',
+    'version': '12.0.6',
     'category': 'other',
     'license': 'AGPL-3',
     'summary': 'Adds wizard to employee form to assign user rights.',
