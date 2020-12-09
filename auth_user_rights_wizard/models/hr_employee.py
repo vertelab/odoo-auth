@@ -20,25 +20,25 @@ class UserAccessRight(models.TransientModel):
 
     employee_id = fields.Many2one('hr.employee', default=lambda self: self.env.context.get('active_id'))
 
-    user_groups = fields.Many2many('res.groups', string="Existing Groups", compute='_set_user_rights')
-
-    @api.depends('employee_id')
-    def _set_user_rights(self):
-        for rec in self:
-            if rec.employee_id and rec.employee_id.user_id:
-                user_groups = rec.env['res.groups'].search([('users', 'in', rec.employee_id.user_id.id),
-                                                            ('name', 'ilike', 'DAFA')])
-                rec.user_groups = user_groups.ids
+    def _get_user_groups(self):
+        active_ids = self.env.context.get('active_ids')
+        if active_ids:
+            employee_user_id = self.env['hr.employee'].sudo().search([('id', '=', active_ids[0])])
+            if employee_user_id.user_id:
+                user_groups = self.env['res.groups'].sudo().search([('users', 'in', employee_user_id.user_id.id),
+                                                                    ('name', 'ilike', 'DAFA')])
+                return user_groups.ids
             else:
-                rec.user_groups = False
+                return False
 
-    group_id = fields.Many2many('res.groups', string="Group", domain=[('name', 'ilike', 'DAFA')])
+    group_id = fields.Many2many('res.groups', string="Group", domain=[('name', 'ilike', 'DAFA')],
+                                default=_get_user_groups)
 
     def action_assign_rights(self):
         active_ids = self.env.context.get('active_ids')
         if active_ids:
             for _id in active_ids:
-                employee_user_id = self.env['hr.employee'].search([('id', '=', _id)])
+                employee_user_id = self.env['hr.employee'].sudo().search([('id', '=', _id)])
                 if not employee_user_id.user_id:
                     new_user_id = self.env['res.users'].sudo().create({
                         'name': employee_user_id.name,
@@ -52,3 +52,4 @@ class UserAccessRight(models.TransientModel):
                         group_rec.sudo().write({
                             'users': [(4, employee_user_id.user_id.id)]
                         })
+
