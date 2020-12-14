@@ -1,0 +1,32 @@
+<odoo>
+    <record id="base_user_groups_dafa.group_dafa_employees_read" model="res.groups">
+        <field name="comment">DAFA Admin - Read</field>
+    </record>
+
+    <record id="base_user_groups_dafa.group_dafa_employees_write" model="res.groups">
+        <field name="comment">DAFA Admin - Write</field>
+    </record>
+
+    <record id="base_user_groups_dafa.group_dafa_org_admin_read" model="res.groups">
+        <field name="comment">DAFA Org Admin - Read</field>
+    </record>
+
+    <!-- Superadmin (Write) -->
+    <record id="base_user_groups_dafa.group_dafa_superadmin" model="res.groups">
+        <field name="comment">DAFA Superadmin</field>
+    </record>
+
+    <record id="base_user_groups_dafa.group_dafa_participants_read" model="res.groups">
+        <field name="comment">DAFA Participants - Read</field>
+    </record>
+
+    <record id="base_user_groups_dafa.group_dafa_participants_write" model="res.groups">
+        <field name="comment">DAFA Participants - Write</field>
+    </record>
+
+
+    <record id="base_user_groups_dafa.group_dafa_admin_accounting_read" model="res.groups">
+        <field name="comment">DAFA Accounting - Read</field>
+    </record>
+
+</odoo>

@@ -30,7 +30,8 @@
     'website': 'http://www.vertel.se',
     'depends': ['base', 'hr', 'base_user_groups_dafa'],
     'data': [
-        'views/hr_employee_view.xml'
+        'views/hr_employee_view.xml',
+        'security/security.xml',
     ],
 }
 # vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
