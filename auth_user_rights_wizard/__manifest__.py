@@ -21,16 +21,17 @@
 
 {
     'name': 'Auth User Rights Wizard',
-    'version': '12.0.6',
+    'version': '12.0.8',
     'category': 'other',
     'license': 'AGPL-3',
     'summary': 'Adds wizard to employee form to assign user rights.',
-    'description': """Fixes of user rights wizard on employee form.""",
+    'description': """This version replaces the Action-popup for checkboxes in the form.""",
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['base', 'hr', 'base_user_groups_dafa'],
     'data': [
-        'views/hr_employee_view.xml'
+        'views/hr_employee_view.xml',
+        'security/security.xml',
     ],
 }
 # vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:

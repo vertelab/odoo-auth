@@ -5,51 +5,51 @@ from odoo.exceptions import ValidationError
 class HREmployee(models.Model):
     _inherit = 'hr.employee'
 
-    user_groups = fields.Many2many('res.groups', string="User Groups", compute='_set_user_rights')
+    def _get_employee_groups(self):
+        if self.user_id:
+            user_groups = self.env['res.groups'].sudo().search([('users', 'in', self.user_id.id),
+                                                                ('name', 'ilike', 'DAFA')])
+            return user_groups.ids
+        else:
+            return False
 
-    @api.depends('user_id')
-    def _set_user_rights(self):
-        for rec in self:
-            if rec.user_id:
-                user_groups = rec.env['res.groups'].search([('users', 'in', rec.user_id.id), ('name', 'ilike', 'DAFA')])
-                rec.user_groups = user_groups.ids
+    user_groups = fields.Many2many('res.groups', string="User Groups", domain=[('name', 'ilike', 'DAFA')],
+                                   default=_get_employee_groups)
 
+    @api.model
+    def create(self, vals):
+        res = super(HREmployee, self).create(vals)
+        if res.user_groups:
+            self.update_group(res)
+        return res
 
-class UserAccessRight(models.TransientModel):
-    _name = 'hr.employee.user.right'
+    def create_user(self, value):
+        new_user_id = self.env['res.users'].sudo().create({
+            'name': value.name,
+            'login': value.work_email,
+            'email': value.work_email,
+            "notification_type": "email",
+        })
+        value.user_id = new_user_id.id
 
-    employee_id = fields.Many2one('hr.employee', default=lambda self: self.env.context.get('active_id'))
+    def update_group(self, value):
+        permission_check = self.env.user.has_group('base_user_groups_dafa.group_dafa_superadmin')
+        if not permission_check:
+            raise ValidationError(_("You are not permitted to do this"))
+        if permission_check and not value.work_email:
+            raise ValidationError(_("Kindly Enter an email for employee"))
 
-    def _get_user_groups(self):
-        active_ids = self.env.context.get('active_ids')
-        if active_ids:
-            employee_user_id = self.env['hr.employee'].sudo().search([('id', '=', active_ids[0])])
-            if employee_user_id.user_id:
-                user_groups = self.env['res.groups'].sudo().search([('users', 'in', employee_user_id.user_id.id),
-                                                                    ('name', 'ilike', 'DAFA')])
-                return user_groups.ids
-            else:
-                return False
+        if not value.user_id:
+            self.create_user(value)
+        if value.user_id:
+            for group_rec in value.user_groups:
+                group_rec.sudo().write({
+                    'users': [(4, value.user_id.id)]
+                })
 
-    group_id = fields.Many2many('res.groups', string="Group", domain=[('name', 'ilike', 'DAFA')],
-                                default=_get_user_groups)
-
-    def action_assign_rights(self):
-        active_ids = self.env.context.get('active_ids')
-        if active_ids:
-            for _id in active_ids:
-                employee_user_id = self.env['hr.employee'].sudo().search([('id', '=', _id)])
-                if not employee_user_id.user_id:
-                    new_user_id = self.env['res.users'].sudo().create({
-                        'name': employee_user_id.name,
-                        'login': employee_user_id.work_email,
-                        'email': employee_user_id.work_email,
-                        "notification_type": "email",
-                    })
-                    employee_user_id.user_id = new_user_id.id
-                if employee_user_id.user_id:
-                    for group_rec in self.group_id:
-                        group_rec.sudo().write({
-                            'users': [(4, employee_user_id.user_id.id)]
-                        })
-
+    @api.multi
+    def write(self, vals):
+        res = super(HREmployee, self).write(vals)
+        if self.user_groups:
+            self.update_group(self)
+        return res
