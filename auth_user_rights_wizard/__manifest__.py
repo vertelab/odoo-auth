@@ -26,18 +26,11 @@
     'license': 'AGPL-3',
     'summary': 'Adds wizard to employee form to assign user rights.',
     'description': """This version replaces the Action-popup for checkboxes in the form.""",
-    'description': """
-This version adds tour to the module
-================================================================================================
-- 12.0.7 This version replaces the Action-popup for checkboxes in the form.
-- 12.0.8 This version adds tour to the module
-""",
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['base', 'hr', 'base_user_groups_dafa', 'web_tour'],
+    'depends': ['base', 'hr', 'base_user_groups_dafa'],
     'data': [
         'views/hr_employee_view.xml',
-        'views/assets.xml',
         'security/security.xml',
     ],
 }
