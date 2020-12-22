@@ -30,7 +30,7 @@ class HREmployee(models.Model):
             'email': value.work_email,
             "notification_type": "email",
         })
-        value.user_id = new_user_id.id
+        value.sudo().user_id = new_user_id.id
 
     def update_group(self, value):
         permission_check = self.env.user.has_group('base_user_groups_dafa.group_dafa_superadmin')
