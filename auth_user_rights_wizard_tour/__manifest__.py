@@ -21,14 +21,18 @@
 
 {
     'name': 'Auth User Rights Wizard Tour',
-    'version': '12.0.1',
-    'category': 'other',
+    'version': '12.0.1.0.3',
+    'category': 'Outplacement',
     'license': 'AGPL-3',
     'summary': 'Odoo-tour for the Auth User Rights Wizard Module.',
-    'description': """This module adds a Odoo-tour for the auth_user_rights_wizard-module AFC-780.""",
+    'description': """
+    This module adds a Odoo-tour for the auth_user_rights_wizard-module AFC-780.\n
+    Fix to solve issue with generating users without directs rights to res.users AFC-1544.\n
+    """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['web_tour', 'hr', 'auth_user_rights_wizard'],
+    'depends': ['hr',
+                'auth_user_rights_wizard'],
     'data': [
         'views/assets.xml',
     ],
