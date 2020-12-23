@@ -27,11 +27,11 @@
     'summary': 'Odoo-tour for the Auth User Rights Wizard Module.',
     'description': """
     This module adds a Odoo-tour for the auth_user_rights_wizard-module AFC-780.\n
-    Fix to solve issue with generating users without directs rights to res.users AFC-1544.\n
+    Added version numbering\n
     """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['hr',
+    'depends': ['web_tour',
                 'auth_user_rights_wizard'],
     'data': [
         'views/assets.xml',
