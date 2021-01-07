@@ -35,7 +35,7 @@
                 'base_user_groups_dafa'],
     'data': [
         'views/hr_employee_view.xml',
-        'security/security.xml',
+        'security/ir.model.access.csv'
     ],
 }
 # vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:

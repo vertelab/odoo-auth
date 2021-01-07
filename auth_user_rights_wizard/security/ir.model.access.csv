@@ -1,0 +1,2 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_ir_module_category","ir.module.category - DAFA superadmin","base.model_ir_module_category",base_user_groups_dafa.group_dafa_superadmin,1,0,0,0
