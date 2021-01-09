@@ -21,14 +21,15 @@
 
 {
     'name': 'Auth User Rights Wizard',
-    'version': '12.0.1.0.8',
+    'version': '12.0.1.0.9',
     'category': 'Outplacement',
     'license': 'AGPL-3',
     'summary': 'Adds wizard to employee form to assign user rights.',
     'description': """
     Adds function to employee-form to assign user rights without having write-rights to res.users. AFC-1544\n
     v12.0.7 This version replaces the Action-popup for checkboxes in the form.\n
-    v12.0.1.0.8 Adds new version number-standard and description.\n""",
+    v12.0.1.0.8 Adds new version number-standard and description.\n
+    v12.0.1.0.9 Namefix and translation.\n""",
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['hr', 
