@@ -24,9 +24,9 @@ class HREmployee(models.Model):
 
     def _create_user(self):
         new_user_id = self.env['res.users'].sudo().create({
-            'name': value.name,
-            'login': value.work_email,
-            'email': value.work_email,
+            'name': self.name,
+            'login': self.work_email,
+            'email': self.work_email,
             "notification_type": "email",
         })
         self.sudo().user_id = new_user_id.id
