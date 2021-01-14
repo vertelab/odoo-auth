@@ -33,7 +33,7 @@ class HREmployee(models.Model):
 
     @api.one
     def update_group(self):
-        permission_check = self.env.user._is_system() or self.env.user.has_group('base_user_groups_dafa.group_dafa_superadmin')
+        permission_check = self.env.user._is_system() or self.env.user.has_group('base_user_groups_dafa.group_dafa_org_admin_write')
         if not permission_check:
             raise ValidationError(_("You are not permitted to do this"))
         if not self.work_email:
