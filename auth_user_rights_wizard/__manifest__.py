@@ -21,7 +21,7 @@
 
 {
     'name': 'Auth User Rights Wizard',
-    'version': '12.0.1.0.9',
+    'version': '12.0.1.0.10',
     'category': 'Outplacement',
     'license': 'AGPL-3',
     'summary': 'Adds wizard to employee form to assign user rights.',
@@ -33,7 +33,7 @@
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['hr', 
-                'base_user_groups_dafa'],
+                'auth_saml_dafa'],
     'data': [
         'views/hr_employee_view.xml',
         'security/ir.model.access.csv'
