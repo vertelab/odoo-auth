@@ -34,6 +34,21 @@ class HREmployee(models.Model):
         })
         self.sudo().user_id = new_user_id.id
 
+    def _update_user(self):
+        self.sudo().user_id.write({
+            'login': self.work_email,
+            'email': self.work_email,
+            'saml_uid': self.ssnid,
+        })
+    
+    @api.one
+    def update_user(self):
+        permission_lvl = (self.env.user._is_system() or self.env.user.has_group('base_user_groups_dafa.group_dafa_org_admin_write')) and 2
+        permission_lvl = permission_lvl or (self.env.user.has_group('base_user_groups_dafa.group_dafa_employees_write') and 1)
+        if not permission_lvl:
+            raise ValidationError(_("You are not permitted to do this"))
+        self._update_user()
+
     @api.one
     def update_group(self):
         permission_lvl = (self.env.user._is_system() or self.env.user.has_group('base_user_groups_dafa.group_dafa_org_admin_write')) and 2
@@ -49,6 +64,8 @@ class HREmployee(models.Model):
             raise ValidationError(_("Wrong SSN format. Should be 12 numbers (199010241234)."))
         if not self.user_id:
             self._create_user()
+        else:
+            self._update_user()
         if self.user_id:
             if self.env.user._is_system():
                 user_sudo = self.user_id
@@ -58,7 +75,7 @@ class HREmployee(models.Model):
             lvl2_groups = self.env.ref('base_user_groups_dafa.group_dafa_org_admin_write')
             # Check all DAFA groups and add/remove them
             for group in self.env['res.groups'].search([('is_dafa', '=', True)]):
-                if permission_lvl < 2 and group in lvl2_group:
+                if permission_lvl < 2 and group in lvl2_groups:
                     # Level 1 is not permitted to change level 2 group membership
                     continue
                 if group in user_sudo.groups_id:
@@ -77,4 +94,6 @@ class HREmployee(models.Model):
         res = super(HREmployee, self).write(vals)
         if 'user_groups' in vals:
             self.update_group()
+        elif 'work_email' in vals or 'ssnid' in vals:
+            self.update_user()
         return res
