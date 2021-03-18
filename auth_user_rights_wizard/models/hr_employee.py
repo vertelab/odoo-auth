@@ -2,7 +2,21 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 import re
 
-class HREmployee(models.Model):
+
+def validate_personnummer(ssnid):
+    control_digit = int(ssnid[-1])
+    tot = 0
+    multiplicator = 2
+    for digit in ssnid[:-1]:
+        res = int(digit) * multiplicator
+        if res > 9:
+            res = 1 + res % 10
+        tot += res
+        multiplicator = (multiplicator % 2) + 1
+    return (10 - (tot % 10)) % 10 == control_digit
+
+
+class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
     def _get_employee_groups(self):
@@ -18,7 +32,7 @@ class HREmployee(models.Model):
 
     @api.model
     def create(self, vals):
-        res = super(HREmployee, self).create(vals)
+        res = super(HrEmployee, self).create(vals)
         if res.user_groups:
             res.update_group()
         return res
@@ -43,25 +57,31 @@ class HREmployee(models.Model):
     
     @api.one
     def update_user(self):
-        permission_lvl = (self.env.user._is_system() or self.env.user.has_group('base_user_groups_dafa.group_dafa_org_admin_write')) and 2
-        permission_lvl = permission_lvl or (self.env.user.has_group('base_user_groups_dafa.group_dafa_employees_write') and 1)
+        permission_lvl = (self.env.user._is_system() or self.env.user.has_group(
+            'base_user_groups_dafa.group_dafa_org_admin_write')) and 2
+        permission_lvl = permission_lvl or (
+                self.env.user.has_group('base_user_groups_dafa.group_dafa_employees_write') and 1)
         if not permission_lvl:
-            raise ValidationError(_("You are not permitted to do this"))
+            raise ValidationError(_("You are not permitted to do this."))
         self._update_user()
 
     @api.one
     def update_group(self):
-        permission_lvl = (self.env.user._is_system() or self.env.user.has_group('base_user_groups_dafa.group_dafa_org_admin_write')) and 2
-        permission_lvl = permission_lvl or (self.env.user.has_group('base_user_groups_dafa.group_dafa_employees_write') and 1)
+        permission_lvl = (self.env.user._is_system() or self.env.user.has_group(
+            'base_user_groups_dafa.group_dafa_org_admin_write')) and 2
+        permission_lvl = permission_lvl or (self.env.user.has_group(
+            'base_user_groups_dafa.group_dafa_employees_write') and 1)
         if not permission_lvl:
-            raise ValidationError(_("You are not permitted to do this"))
+            raise ValidationError(_("You are not permitted to do this."))
         if not self.work_email:
-            raise ValidationError(_("Kindly Enter an email for employee"))
+            raise ValidationError(_("Kindly Enter an email for employee."))
         if not self.ssnid:
-            raise ValidationError(_("Kindly Enter a social security number for employee"))
-        # TODO: Better SSN validation. Check control character.
+            raise ValidationError(_("Kindly Enter a social security number for employee."))
+        # Validate personnummer
         if not re.match('^[0-9]{12}$', self.ssnid):
             raise ValidationError(_("Wrong SSN format. Should be 12 numbers (199010241234)."))
+        if not validate_personnummer(self.ssnid[2:]):
+            raise ValidationError(_("Wrong SSN format. Control digit does not validate."))
         if not self.user_id:
             self._create_user()
         else:
@@ -88,10 +108,13 @@ class HREmployee(models.Model):
                 user_sudo.write({
                     'groups_id': groups_id
                 })
+            updated_groups = user_sudo.groups_id.filtered('is_dafa') & self.user_groups
+            super(HrEmployee, self).write({
+                'user_groups': [(6, 0, updated_groups._ids)]})
 
     @api.multi
     def write(self, vals):
-        res = super(HREmployee, self).write(vals)
+        res = super(HrEmployee, self).write(vals)
         if 'user_groups' in vals:
             self.update_group()
         elif 'work_email' in vals or 'ssnid' in vals:
