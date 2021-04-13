@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0-20201022\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-09 14:09+0000\n"
-"PO-Revision-Date: 2021-01-09 14:09+0000\n"
+"PO-Revision-Date: 2021-03-18 08:09+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,10 +21,16 @@ msgid "Employee"
 msgstr "Anställd"
 
 #. module: auth_user_rights_wizard
-#: code:addons/auth_user_rights_wizard/models/hr_employee.py:40
+#: code:addons/auth_user_rights_wizard/models/hr_employee.py:79
 #, python-format
-msgid "Kindly Enter an email for employee"
-msgstr ""
+msgid "Kindly Enter a social security number for employee."
+msgstr "Du måste fylla i ett personnummer för den anställde."
+
+#. module: auth_user_rights_wizard
+#: code:addons/auth_user_rights_wizard/models/hr_employee.py:77
+#, python-format
+msgid "Kindly Enter an email for employee."
+msgstr "Du måste fylla i epost för den anställde."
 
 #. module: auth_user_rights_wizard
 #: model:ir.model.fields,field_description:auth_user_rights_wizard.field_hr_employee__user_groups
@@ -32,8 +38,21 @@ msgid "User Groups"
 msgstr "Behörighetsgrupper"
 
 #. module: auth_user_rights_wizard
-#: code:addons/auth_user_rights_wizard/models/hr_employee.py:38
+#: code:addons/auth_user_rights_wizard/models/hr_employee.py:84
 #, python-format
-msgid "You are not permitted to do this"
-msgstr ""
+msgid "Wrong SSN format. Control digit does not validate."
+msgstr "Fel format på personnummer. Kontrollsiffran är ej gilitg."
+
+#. module: auth_user_rights_wizard
+#: code:addons/auth_user_rights_wizard/models/hr_employee.py:82
+#, python-format
+msgid "Wrong SSN format. Should be 12 numbers (199010241234)."
+msgstr "Fel format på personnummer. Ska vara 12 siffror (199010241234)."
+
+#. module: auth_user_rights_wizard
+#: code:addons/auth_user_rights_wizard/models/hr_employee.py:65
+#: code:addons/auth_user_rights_wizard/models/hr_employee.py:75
+#, python-format
+msgid "You are not permitted to do this."
+msgstr "Du har inte behörighet för detta."
 
