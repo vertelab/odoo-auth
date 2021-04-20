@@ -30,6 +30,6 @@
     'website': 'http://www.vertel.se',
     'depends': ['base_setup', 'auth_signup'],
     'data': ['views/res_users_views.xml','views/res_config_settings_views.xml'],
-    'auto_install': True,
+    'auto_install': False,
 }
 # vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
