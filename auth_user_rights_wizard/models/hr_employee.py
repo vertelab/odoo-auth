@@ -59,7 +59,7 @@ class HrEmployee(models.Model):
         elif values:
             user = self.env['res.users'].sudo().create({
                 'firstname': values.get('firstname'),
-                'lastname': values.get('firstname'),
+                'lastname': values.get('lastname'),
                 'login': values.get('work_email'),
                 'email': values.get('work_email'),
                 "notification_type": "email",
