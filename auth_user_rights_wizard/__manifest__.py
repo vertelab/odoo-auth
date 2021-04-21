@@ -38,7 +38,8 @@
                 'mail_tracking_x2m'],
     'data': [
         'views/hr_employee_view.xml',
-        'security/ir.model.access.csv'
+        'security/ir.model.access.csv',
+        'security/hr_security.xml',
     ],
 }
 # vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:

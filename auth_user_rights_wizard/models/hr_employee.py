@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, AccessError
 import re
 
 
@@ -37,21 +37,36 @@ class HrEmployee(models.Model):
 
     @api.model
     def create(self, vals):
+        user_id = self._create_user(values=vals)
+        vals['user_id'] = user_id
         res = super(HrEmployee, self).create(vals)
         if res.user_groups:
             res.update_group()
         return res
 
-    def _create_user(self):
-        new_user_id = self.env['res.users'].sudo().create({
-            'name': self.name,
-            'login': self.work_email,
-            'email': self.work_email,
-            "notification_type": "email",
-            'saml_provider_id': self.env.ref('auth_saml_dafa.provider_ciam').id,
-            'saml_uid': self.ssnid,
-        })
-        self.sudo().user_id = new_user_id.id
+    def _create_user(self, values=None):
+        user = None
+        if self:
+            user = self.env['res.users'].sudo().create({
+                'name': self.name,
+                'login': self.work_email,
+                'email': self.work_email,
+                "notification_type": "email",
+                'saml_provider_id': self.env.ref('auth_saml_dafa.provider_ciam').id,
+                'saml_uid': self.ssnid,
+            })
+            self.sudo().user_id = user
+        elif values:
+            user = self.env['res.users'].sudo().create({
+                'firstname': values.get('firstname'),
+                'lastname': values.get('firstname'),
+                'login': values.get('work_email'),
+                'email': values.get('work_email'),
+                "notification_type": "email",
+                'saml_provider_id': self.env.ref('auth_saml_dafa.provider_ciam').id,
+                'saml_uid': values.get('ssnid'),
+            })
+        return user and user.id
 
     def _update_user(self):
         self.sudo().user_id.write({
@@ -67,7 +82,7 @@ class HrEmployee(models.Model):
         permission_lvl = permission_lvl or (
                 self.env.user.has_group('base_user_groups_dafa.group_dafa_employees_write') and 1)
         if not permission_lvl:
-            raise ValidationError(_("You are not permitted to do this."))
+            raise AccessError(_("You are not permitted to do this."))
         self._update_user()
 
     @api.one
@@ -77,9 +92,9 @@ class HrEmployee(models.Model):
         permission_lvl = permission_lvl or (self.env.user.has_group(
             'base_user_groups_dafa.group_dafa_employees_write') and 1)
         if not permission_lvl:
-            raise ValidationError(_("You are not permitted to do this."))
+            raise AccessError(_("You are not permitted to do this."))
         if permission_lvl < 2 and not (self.env.user.performing_operation_ids & self.performing_operation_ids):
-            raise ValidationError(_("You are only allowed to administer groups for your performing operation."))
+            raise AccessError(_("You are only allowed to administer groups for your performing operation."))
         if not self.work_email:
             raise ValidationError(_("Kindly Enter an email for employee."))
         if not self.ssnid:
@@ -124,9 +139,9 @@ class HrEmployee(models.Model):
                 own_user = True
         if 'user_id' in vals:
             if not (self.env.user._is_system() or self.env.user.has_group('base_user_groups_dafa.1_line_support')):
-                raise ValidationError(_("You are not allowed to administrate users!"))
+                raise AccessError(_("You are not allowed to administrate users!"))
         if own_user:
-            raise ValidationError(_("You are not allowed to administrate your own user!"))
+            raise AccessError(_("You are not allowed to administrate your own user!"))
         res = super(HrEmployee, self).write(vals)
         if 'user_groups' in vals:
             self.update_group()
