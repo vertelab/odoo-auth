@@ -20,16 +20,21 @@
 ##############################################################################
 
 {
-    'name': 'Login timeout',
-    'version': '12.0.1',
-    'category': 'other',
+    'name': 'Auth User Rights Wizard Tour',
+    'version': '12.0.1.0.3',
+    'category': 'Outplacement',
     'license': 'AGPL-3',
-    'summary': 'Adds a simple timeout for users after repeated failed logins in too short a time.',
-    'description': """Two new settings are added under Global Settings > Users > Login timeout.""",
+    'summary': 'Odoo-tour for the Auth User Rights Wizard Module.',
+    'description': """
+    This module adds a Odoo-tour for the auth_user_rights_wizard-module AFC-780.\n
+    Added version numbering\n
+    """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['base_setup', 'auth_signup'],
-    'data': ['views/res_users_views.xml','views/res_config_settings_views.xml'],
-    'auto_install': False,
+    'depends': ['web_tour',
+                'auth_user_rights_wizard'],
+    'data': [
+        'views/assets.xml',
+    ],
 }
 # vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
