@@ -21,16 +21,17 @@
 
 {
     "name": "DAFA SAML Settings",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
-    "description": "SAML Settings for Arbetsförmedlingen.",
+    "description": "SAML Settings for Arbetsförmedlingen. \n
+    Added maintained url for the modules.",
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-        "auth_saml_ol_create_user",
-        "auth_saml_ol_groups",
-        "base_user_groups_dafa",
+        "auth_saml_ol_create_user", # https://github.com/vertelab/server-auth/tree/Dev-12.0-Fenix-Sprint-02/auth_saml_ol_create_user
+        "auth_saml_ol_groups",      # https://github.com/vertelab/server-auth/tree/Dev-12.0-Fenix-Sprint-02/auth_saml_ol_groups
+        "base_user_groups_dafa",    # https://github.com/vertelab/odoo-base/tree/Dev-12.0-Fenix-Sprint-02
         ],
     "data": [
         "data/af_saml.xml",
