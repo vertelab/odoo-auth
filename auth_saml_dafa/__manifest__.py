@@ -24,8 +24,7 @@
     "version": "12.0.1.0.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
-    "description": "SAML Settings for Arbetsförmedlingen. \n
-    Added maintained url for the modules.",
+    "description": "SAML Settings for Arbetsförmedlingen. Added maintained url for the modules.",
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
