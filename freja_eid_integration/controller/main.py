@@ -17,7 +17,15 @@ _logger = logging.getLogger(__name__)
 from odoo.addons.auth_oauth.controllers.main import OAuthLogin as OAuthLogin
 from odoo.addons.auth_oauth.controllers.main import OAuthController as OAuthController
 from odoo.addons.web.controllers.main import db_monodb, ensure_db, set_cookie_and_redirect, login_and_redirect
+from odoo.addons.portal.controllers.portal import CustomerPortal as CP
 
+class CustomerPortal(CP):
+
+    def __init__(self, **args):
+        self.OPTIONAL_BILLING_FIELDS.extend((
+            'ssnid',
+        ))
+        super(CustomerPortal, self).__init__(**args)
 
 def fragment_to_query_string(func):
     @functools.wraps(func)

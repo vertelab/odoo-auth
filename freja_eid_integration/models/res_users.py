@@ -1,26 +1,19 @@
 import json
-
+import logging
 import requests
+from odoo.addons.auth_signup.models.res_users import SignupError
+from odoo.exceptions import AccessDenied, UserError
 
 from odoo import api, fields, models
-from odoo.exceptions import AccessDenied, UserError
-from odoo.addons.auth_signup.models.res_users import SignupError
 
-import logging
 _logger = logging.getLogger(__name__)
+
 
 class AuthProvider(models.Model):
     _inherit = 'auth.oauth.provider'
 
     client_secret = fields.Char("Client Secret")
-    need_client_secret = fields.Boolean("Need Client Secret")
 
-    @api.onchange('name')
-    def onchange_name(self):
-        if self.name and self.name == 'Freja eID':
-            self.need_client_secret = True
-        else:
-            self.need_client_secret = False
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
@@ -35,14 +28,14 @@ class ResUsers(models.Model):
             _logger.error(access_token)
             base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
             data_user_info = {
-                    'grant_type': 'authorization_code',
-                    'client_id': provider.client_id,
-                    'client_secret': provider.client_secret,
-                    'redirect_uri': base_url + '/auth_oauth/signin',
-                    'code': access_token
-                    }
+                'grant_type': 'authorization_code',
+                'client_id': provider.client_id,
+                'client_secret': provider.client_secret,
+                'redirect_uri': base_url + '/auth_oauth/signin',
+                'code': access_token
+            }
             headers = {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/x-www-form-urlencoded',
             }
             response = requests.post(endpoint, data=data_user_info, headers=headers)
             _logger.error("Response")
@@ -65,7 +58,7 @@ class ResUsers(models.Model):
                 _logger.error("Insdide if datapoint")
                 access_token = validation.get('access_token')
                 response = requests.get(oauth_provider.data_endpoint,
-                                         params={'access_token': access_token})
+                                        params={'access_token': access_token})
                 _logger.error(response.url)
                 _logger.error(response.text)
                 _logger.error(response.request)
@@ -76,9 +69,17 @@ class ResUsers(models.Model):
     @api.model
     def _generate_signup_values(self, provider, validation, params):
         oauth_uid = validation['user_id'] if 'user_id' in validation else ''
+        oauth_provider = self.env['auth.oauth.provider'].browse(provider)
+        if not oauth_uid and oauth_provider.name == 'Freja eID' and 'sub' in validation:
+            oauth_uid = validation.get('sub')
         email = validation.get('email', 'provider_%s_user_%s' % (provider, oauth_uid))
         name = validation.get('name', email)
-        oauth_provider = self.env['auth.oauth.provider'].browse(provider)
+        country_id = False
+        if 'https://frejaeid.com/oidc/claims/country' in validation:
+            country = self.env['res.country'].search(
+                [('code', '=', validation.get('https://frejaeid.com/oidc/claims/country'))])
+            if country:
+                country_id = country.id
         return {
             'name': name,
             'login': email,
@@ -87,6 +88,9 @@ class ResUsers(models.Model):
             'oauth_uid': oauth_uid,
             'oauth_access_token': params['access_token'] if oauth_provider.name != 'Freja eID' else params['code'],
             'active': True,
+            'ssnid': validation.get('https://frejaeid.com/oidc/claims/personalIdentityNumber') if \
+                'https://frejaeid.com/oidc/claims/personalIdentityNumber' in validation else '',
+            'country_id': country_id
         }
 
     @api.model
@@ -113,9 +117,21 @@ class ResUsers(models.Model):
             elif oauth_user:
                 _logger.error("Oauth User")
                 _logger.error(oauth_user)
+                _logger.error(oauth_user.partner_id)
                 oauth_user.write({'oauth_access_token': params['code']})
                 try:
                     _logger.error(oauth_user.login)
+                    if oauth_user and oauth_user.partner_id:
+                        if not oauth_user.partner_id.ssnid and \
+                            'https://frejaeid.com/oidc/claims/personalIdentityNumber' in validation:
+                            oauth_user.partner_id.ssnid = validation.get(
+                                'https://frejaeid.com/oidc/claims/personalIdentityNumber')
+                        if not oauth_user.partner_id.country_id and \
+                            'https://frejaeid.com/oidc/claims/country' in validation:
+                            country = self.env['res.country'].search(
+                                [('code', '=', validation.get('https://frejaeid.com/oidc/claims/country'))])
+                            if country:
+                                oauth_user.partner_id.country_id = country.id
                     return oauth_user.login
                 except Exception as e:
                     _logger.error(str(e))

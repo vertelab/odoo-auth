@@ -6,8 +6,7 @@
         <field name="inherit_id" ref="auth_oauth.view_oauth_provider_form"/>
         <field name="arch" type="xml">
             <field name="client_id" position="after">
-                <field name="need_client_secret" invisible="1"/>
-                <field name="client_secret" attrs="{'invisible': [('need_client_secret', '=', False)]}"/>
+                <field name="client_secret" attrs="{'invisible': [('name', '!=', 'Freja eID')]}"/>
             </field>
         </field>
     </record>
