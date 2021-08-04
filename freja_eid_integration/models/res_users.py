@@ -90,7 +90,8 @@ class ResUsers(models.Model):
             'active': True,
             'ssnid': validation.get('https://frejaeid.com/oidc/claims/personalIdentityNumber') if \
                 'https://frejaeid.com/oidc/claims/personalIdentityNumber' in validation else '',
-            'country_id': country_id
+            'country_id': country_id,
+            'source': 'Freja eID'
         }
 
     @api.model

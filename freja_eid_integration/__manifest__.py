@@ -1,6 +1,6 @@
 {
     'name': 'Freja eID Integration',
-    'version': '13.0.1.0.2',
+    'version': '13.0.1.0.3',
     'author': 'Hemangi Rupareliya',
     'maintainer': 'Vertel AB',
     'contributors': 'Hemangi Rupareliya, Fredrik Avas',
@@ -8,7 +8,7 @@
     'license': 'AGPL-3',
     'category': 'Tools',
     'depends': [
-        'auth_oauth', 'partner_ssn', 'portal'
+        'auth_oauth', 'partner_ssn', 'portal', 'partner_extenstion_verifiedemail'
     ],
     'data': {
         'views/provider_views.xml',
