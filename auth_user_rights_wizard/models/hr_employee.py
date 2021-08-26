@@ -29,7 +29,6 @@ class HrEmployee(models.Model):
 
     user_groups = fields.Many2many('res.groups', string="User Groups", domain=[('is_dafa', '=', 'True')],
                                    default=_get_employee_groups, track_visibility='onchange')
-    ssnid = fields.Char(track_visibility='onchange')
     work_email = fields.Char(track_visibility='onchange')
     firstname = fields.Char(track_visibility='onchange')
     lastname = fields.Char(track_visibility='onchange')
