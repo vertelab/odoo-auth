@@ -21,7 +21,7 @@
 
 {
     'name': 'Auth User Rights Wizard',
-    'version': '12.0.1.1.0',
+    'version': '12.0.1.1.1',
     'category': 'Outplacement',
     'license': 'AGPL-3',
     'summary': 'Adds wizard to employee form to assign user rights.',
@@ -30,7 +30,8 @@
     v12.0.7 This version replaces the Action-popup for checkboxes in the form.
     v12.0.1.0.8 Adds new version number-standard and description.
     v12.0.1.0.9 Namefix and translation.
-    v12.0.1.1.0 Fixed security issues.""",
+    v12.0.1.1.0 Fixed security issues.,
+    v12.0.1.1.1 Prevent tracking of Employee SSN.""",
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['hr', 
