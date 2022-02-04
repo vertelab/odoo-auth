@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Email templates -->
+        <record id="mail_template_new_user_confirmation" model="mail.template">
+            <field name="name">New user Confirmation for Freja eID registration</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="subject">Verified-Email: New user account created</field>
+            <field name="email_to">${object.login | safe}</field>
+            <field name="use_default_to" eval="False"/>
+            <field name="body_html" type="xml">
+                <table border="0" cellpadding="0" cellspacing="0"
+                       style="border-collapse:collapse;background-color:#F1F1F1;font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                    <tbody>
+                        <tr>
+                            <td align="center">
+                                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                       style="border-collapse:collapse;padding:16px;background-color: white; color: #454748; border-collapse:separate;">
+                                    <tbody>
+                                        <!-- CONTENT -->
+                                        <tr>
+                                            <td align="center" style="min-width:590px;">
+                                                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                                       style="border-collapse:collapse;min-width:590px;background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="text-align:left">
+                                                                <span style="font-size:20px;font-weight: bold;">
+                                                                    Congratulation to your registration with Verified
+                                                                    Email!
+                                                                </span>
+                                                                <br/>
+                                                                <br/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top" style="font-size:13px;">
+                                                                <div style="font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
+                                                                    Hi ${object.firstname or ''},
+                                                                    <br/>
+                                                                    <br/>
+                                                                    Thank you for registering with Verified Email!
+                                                                    <br/>It is an honor to serve you and to enable your
+                                                                    secure email communication with verified partners.
+                                                                    <br/>
+                                                                    <br/>
+                                                                    We have set up your account with the following
+                                                                    details:
+                                                                    <br/>
+                                                                    <br/>
+                                                                    <b>Name:</b>
+                                                                    ${object.name or ''}
+                                                                    <br/>
+                                                                    <b>Primary email:</b>
+                                                                    ${'alias' in ctx and ctx['alias'] or ''} - This is
+                                                                    where we will deliver all messages to you.
+                                                                    <br/>
+                                                                    <b>Primary alias:</b>
+                                                                    ${'mailbox' in ctx and ctx['mailbox'] or ''} - This is your
+                                                                    secure email-address. When other email to this
+                                                                    address, we will make sure they are verified and
+                                                                    that the message is secure and untouched by anyone
+                                                                    from their mailbox to your.
+                                                                    <br/>
+                                                                    <b>Email address for HR-systems etc:</b>
+                                                                    ${'ssn_alias' in ctx and ctx['ssn_alias'] or ''} -
+                                                                    This email address is
+                                                                    intended for use by your employer, suppliers or
+                                                                    banks etc. Once they have registered it, they will
+                                                                    always reach you, even if you change your email
+                                                                    address, we will deliver to your new email address
+                                                                    (after you have changed it on verified-email.com).
+                                                                    <br/>
+                                                                    <br/>
+
+                                                                    Thanks again for helping reduce spam, phishing and
+                                                                    other unwanted emails.
+                                                                    <br/>
+                                                                    <br/>
+                                                                    Sincerely
+                                                                    <br/>
+                                                                    <br/>
+                                                                    Fredrik Arvas, founder
+                                                                    <br/>
+                                                                    Verified-Email.com
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="text-align:center;">
+                                                                <hr width="100%"
+                                                                    style="margin:1rem 0 1rem 0;border-top-color:rgba(0, 0, 0, 0.1);border-top-style:solid;border-top-width:1px;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;overflow-y:visible;overflow-x:visible;height:0px;box-sizing:content-box;background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
+</odoo>

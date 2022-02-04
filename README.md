@@ -1,1 +1,1 @@
-# odoo-auth
+# ve-odoo-auth

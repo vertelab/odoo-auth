@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherited_provider_form_view_for_FrejaeID" model="ir.ui.view">
+        <field name="name">inherited.provider.form.view.for.FrejaeID</field>
+        <field name="model">auth.oauth.provider</field>
+        <field name="inherit_id" ref="auth_oauth.view_oauth_provider_form"/>
+        <field name="arch" type="xml">
+            <field name="client_id" position="after">
+                <field name="client_secret" attrs="{'invisible': [('name', '!=', 'Freja eID')]}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

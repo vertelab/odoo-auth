@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="limit_auth_signup" inherit_id="auth_signup.login" name="Hide Sign up">
+        <xpath expr="//a[@t-if='signup_enabled']" position="replace">
+        </xpath>
+        <xpath expr="//a[@t-if='reset_password_enabled']" position="attributes">
+            <attribute name="t-if">debug</attribute>
+        </xpath>
+    </template>
+
+    <template id="login_on_debug" inherit_id="web.login">
+        <xpath expr="//div[hasclass('field-login')]" position="attributes">
+            <attribute name="t-if">debug</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('field-password')]" position="attributes">
+            <attribute name="t-if">debug</attribute>
+        </xpath>
+        <xpath expr="//button[@type='submit']" position="attributes">
+            <attribute name="t-if">debug</attribute>
+        </xpath>
+        <xpath expr="//button[@type='submit']" position="inside">
+            (debug)
+        </xpath>
+    </template>
+
+     <template id="provider_or_on_debug" inherit_id="auth_oauth.providers">
+        <xpath expr="//em" position="attributes">
+            <attribute name="t-if">debug</attribute>
+        </xpath>
+    </template>
+
+</odoo>
