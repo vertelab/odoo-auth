@@ -3,16 +3,16 @@
     <template id="portal_my_details_ssn" name="Portal My Details for SSN" inherit_id="portal.portal_my_details">
         <xpath expr="//div[hasclass('o_portal_details')]/div/div" position="inside">
             <div class="form-group col-xl-6">
-                <label class="col-form-label label-optional" for="ssnid">SSN</label>
-                <input type="text" class="form-control" name="ssnid" t-att-value="partner.ssnid" readonly="1"/>
+                <label class="col-form-label label-optional" for="social_sec_nr">SSN</label>
+                <input type="text" class="form-control" name="social_sec_nr" t-att-value="partner.social_sec_nr" readonly="1"/>
             </div>
         </xpath>
     </template>
 
     <template id="portal_layout_ssn" name="Portal layout for SSN" inherit_id="portal.portal_layout">
         <xpath expr="//div[hasclass('o_portal_my_details')]/div" position="after">
-            <t t-if="user_id.partner_id.ssnid">
-                <b>SSN: </b><t t-esc="user_id.partner_id.ssnid"/>
+            <t t-if="user_id.partner_id.social_sec_nr">
+                <b>SSN: </b><t t-esc="user_id.partner_id.social_sec_nr"/>
             </t>
         </xpath>
     </template>
