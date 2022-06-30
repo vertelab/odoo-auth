@@ -60,6 +60,7 @@ and in RFC 6238 (TOTP: Time-Based One-Time Password Algorithm).
     'license': 'AGPL-3',
     'maintainer': 'Vertel AB',
     'website': 'https://vertel.se/apps',
+    'images': ['static/description/banner.png'], # 560x280 px.
     'depends': ['auth_signup'],
     'data': [
         'res_users.xml',
