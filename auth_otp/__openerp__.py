@@ -21,7 +21,7 @@
 
 
 {
-    'name': 'OTP Authentification',
+    'name': 'auth: OTP Authentification',
     'version': '2.0',
     'category': 'Tools',
     'description': """
