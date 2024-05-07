@@ -21,8 +21,8 @@
 
 
 {
-    'name': 'Check Password Strength',
-    'version': '1.0',
+    'name': 'Auth: Check Password Strength',
+    'version': '17.1.0',
     'category': 'Tools',
     'description': """
 Check the strength of a given password
