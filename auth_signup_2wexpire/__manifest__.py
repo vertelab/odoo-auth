@@ -22,7 +22,7 @@
 
 {
     'name': 'Signup with 2 weeks expiration',
-    'version': '1.0',
+    'version': '17.1.0',
     'license': 'AGPL-3',
     'category': 'Tools',
     'description': """
