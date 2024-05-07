@@ -22,7 +22,7 @@
 
 {
     'name': 'auth: OTP Authentification',
-    'version': '2.0',
+    'version': '17.2.0',
     'category': 'Tools',
     'description': """
 Allow users to login using one time password (OTP)
