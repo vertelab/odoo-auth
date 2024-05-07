@@ -21,8 +21,8 @@
 
 
 {
-    'name': 'PAM Authentification',
-    'version': '2.0',
+    'name': 'Auth: PAM Authentification',
+    'version': '17.2.0',
     'category': 'Tools',
     'description': """
         Allow PAM-authentication systems to use
