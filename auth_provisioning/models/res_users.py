@@ -9,17 +9,29 @@ import base64
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    
+     
     base_url_parameter = fields.Char(compute="set_base_url")
-    qrcode = fields.Binary(compute="create_url_qrcode", store=False, readonly=False)
+    qrcode_base_url = fields.Binary(compute="create_url_qrcode", store=False, readonly=False)
+    qrcode_signup_url = fields.Binary(compute="create_url_qrcode", store=False, readonly=False)
 
     def create_url_qrcode(self):
         for record in self:
             buffer = io.BytesIO()
             qr = pyqrcode.create(record.base_url_parameter)
             qr.png(buffer, scale=3)
-            record.qrcode = base64.b64encode(buffer.getvalue()).decode('utf-8')  # Encode to base64 and decode to string
+            record.qrcode_base_url = base64.b64encode(buffer.getvalue()).decode('utf-8')  # Encode to base64 and decode to string
+            logging.warning(f"{record=}")
+            logging.warning(f"{record.partner_id=}")
+            
+            sign_up_link = record.partner_id._get_signup_url()
+            logging.warning(f"{sign_up_link=}")
 
+            
+            buffer = io.BytesIO()
+            qr = pyqrcode.create(sign_up_link) #getsignupurl
+            qr.png(buffer, scale=3)
+            record.qrcode_signup_url = base64.b64encode(buffer.getvalue()).decode('utf-8')  # Encode to base64 and decode to string
+            
  
     def set_base_url(self):
         for record in self:

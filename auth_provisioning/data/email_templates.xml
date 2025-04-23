@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <!-- Template to send Sale Order email to the customer -->
+    <record id="mail_qr_code" model="mail.template">
+        <field name="name">QR code test</field>
+        <field name="model_id" ref="base.model_res_users"/>
+        <field name="email_from">{{ object.company_id.email }}</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="subject">Your QR code {{ object.name }}</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+                <p>Dear
+                    <strong>
+                        <t t-out="object.partner_id.name"/>
+                    </strong>
+                </p>
+            </div>
+        </field>
+    </record>
+    </data>
+</odoo>
