@@ -43,6 +43,7 @@
      #},
     'data': [
         'views/views.xml',
+        'data/email_templates.xml',
     ],
     'demo': [],
     'application': False,
