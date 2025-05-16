@@ -1,17 +1,39 @@
 <odoo>
-  <data>
-   <record id="view_res_users_form" model="ir.ui.view">
-        <field name="name">view_res_users_form</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="hr.res_users_view_form_profile"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='mobile_phone']" position="after">
-                <field name="base_url_parameter"/>
-                <field name="qrcode_base_url" widget="image"/>
-                <field name="qrcode_signup_url" widget="image"/>
-            </xpath>
-        </field>
-     </record>
-  </data>
+    <data>
+        <record id="view_res_users_form" model="ir.ui.view">
+            <field name="name">view_res_users_form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="hr.res_users_view_form_profile"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='mobile_phone']" position="after">
+                    <field name="base_url_parameter"/>
+                    <field name="qrcode_base_url" widget="image"/>
+                    <field name="qrcode_signup_url" widget="image"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_users_view_form_auth_provisioning" model="ir.ui.view">
+            <field name="name">res.users.form.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <div class="alert alert-success o_form_header position-relative" invisible="state != 'new'" role="status">
+                        <a class="close position-absolute" style="right: 10px; top: 5px; font-size: 1.5rem; font-weight: bold;" data-dismiss="alert" href="#" aria-label="Close">×</a>
+                        <div class="text-center">
+                            <div invisible="state != 'active'">
+                                <strong>A password reset has been requested for this user. An email containing the following link has been sent:</strong>
+                            </div>
+                            <div invisible="state != 'new'">
+                                <strong>An invitation email containing the following subscription link has been sent:</strong>
+                            </div>
+                            <div><field name="signup_url" widget="url"/></div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
 </odoo>
 

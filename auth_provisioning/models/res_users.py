@@ -14,6 +14,19 @@ class ResUsers(models.Model):
     qrcode_base_url = fields.Binary(compute="create_url_qrcode", store=False, readonly=False)
     qrcode_signup_url = fields.Binary(compute="create_url_qrcode", store=False, readonly=False)
 
+    @api.depends('partner_id')
+    def _compute_signup_url(self):
+        for rec in self:
+            if rec.partner_id and rec.partner_id._origin:
+                print("---", rec.partner_id)
+                print("---", rec.partner_id._origin)
+                print("---", rec.partner_id._get_signup_url())
+                rec.signup_url = rec.partner_id._get_signup_url()
+            else:
+                rec.signup_url = False
+
+    signup_url = fields.Char(string="Signup URL", compute=_compute_signup_url)
+
     def create_url_qrcode(self):
         for record in self:
             buffer = io.BytesIO()
