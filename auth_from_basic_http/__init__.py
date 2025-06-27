@@ -2,8 +2,36 @@ import base64
 import logging
 from odoo.modules.registry import Registry
 from odoo.http import db_list, request, Response
+from odoo.tools.config import config
 
 _logger = logging.getLogger(__name__)
+
+def domain_requires_basic_auth():
+    """Check if current domain requires Basic Auth"""
+    basic_auth_domains = config.get('basic_auth_domains')
+    if not basic_auth_domains:
+        return False
+
+    # Get the current request host
+    current_host = request.httprequest.host
+    # Parse configured domains (comma-separated)
+    configured_domains = [domain.strip() for domain in basic_auth_domains.split(',')]
+
+    # Check if current host matches any configured domain
+    for domain in configured_domains:
+        # Handle wildcard patterns like *.domain.com
+        if domain.startswith('*.'):
+            # Remove the *. prefix to get the base domain
+            base_domain = domain[2:]  # *.domain.com → domain.com
+
+            # Check if current host is a subdomain of base_domain
+            if current_host == base_domain or current_host.endswith('.' + base_domain):
+                return True
+
+        if domain and current_host == domain:
+            return True
+
+    return False
 
 
 def get_basic_auth_credentials():
@@ -43,6 +71,10 @@ try:
         # Ensure request object has session available for get_basic_auth_credentials()
         request.session = session
 
+        # Check if this domain requires Basic Auth
+        if not domain_requires_basic_auth():
+            return session, dbname
+
         # If not logged in and have database
         if not session.uid and dbname:
             username, password = get_basic_auth_credentials()
@@ -75,7 +107,6 @@ try:
                 raise Unauthorized(response=send_auth_challenge())
 
         return session, dbname
-
 
     Request._get_session_and_dbname = patched_get_session_and_dbname
     _logger.info("Basic Auth module loaded successfully")
