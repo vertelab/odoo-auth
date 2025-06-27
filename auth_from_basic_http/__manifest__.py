@@ -7,14 +7,9 @@
         This module allows Odoo to authenticate users via HTTP Basic Authentication.
         It extracts username and password from the Authorization header and attempts
         to login to the first available database.
-
-        Useful for single sign-on setups where a web server handles authentication
-        and passes credentials to Odoo via HTTP headers.
-
-        Based on the original implementation for older Odoo versions, adapted for Odoo 18.
     ''',
-    'author': 'Your Company',
-    'website': 'https://www.yourcompany.com',
+    'author': 'Vertel AB',
+    'website': 'https://www.vertel.se',
     'depends': ['base', 'web'],
     'data': [],
     'installable': True,
