@@ -48,6 +48,6 @@ class ResUsers(models.Model):
  
     def set_base_url(self):
         for record in self:
-            record.base_url_parameter = self.env['ir.config_parameter'].get_param(
+            record.base_url_parameter = self.env['ir.config_parameter'].sudo().get_param(
                 'web.base.url', 'Hittade inte web.base.url'
             )
