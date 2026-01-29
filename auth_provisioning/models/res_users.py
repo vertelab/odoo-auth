@@ -18,9 +18,6 @@ class ResUsers(models.Model):
     def _compute_signup_url(self):
         for rec in self:
             if rec.partner_id and rec.partner_id._origin:
-                print("---", rec.partner_id)
-                print("---", rec.partner_id._origin)
-                print("---", rec.partner_id._get_signup_url())
                 rec.signup_url = rec.partner_id._get_signup_url()
             else:
                 rec.signup_url = False
