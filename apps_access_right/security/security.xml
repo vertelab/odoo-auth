@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_apps_manager" model="res.groups">
+        <field name="name">Apps</field>
+        <field name="comment">Can install, update, and uninstall applications</field>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- Rule: Only Apps group can install modules -->
+    <record id="ir_module_module_install_rule" model="ir.rule">
+        <field name="name">Apps: Install Modules</field>
+        <field name="model_id" ref="base.model_ir_module_module"/>
+        <field name="domain_force">[('state', '!=', 'to install')]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="perm_read" eval="False"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="ir_module_module_apps_manager_rule" model="ir.rule">
+        <field name="name">Apps Manager: Full Module Access</field>
+        <field name="model_id" ref="base.model_ir_module_module"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_apps_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+
+    <record id="res_groups_apps_manager_full_access" model="ir.rule">
+        <field name="name">Apps Manager: Full Groups Access</field>
+        <field name="model_id" ref="base.model_res_groups"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_apps_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+
+    <record id="res_users_apps_manager_full_access" model="ir.rule">
+        <field name="name">Apps Manager: Full Users Access</field>
+        <field name="model_id" ref="base.model_res_users"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_apps_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+</odoo>
