@@ -2,11 +2,9 @@
 <odoo>
 
     <record id="group_apps_manager" model="res.groups">
-        <field name="name">Apps</field>
+        <field name="name">Administration/Settings/Apps</field>
         <field name="comment">Can install, update, and uninstall applications</field>
+        <field name="implied_ids" eval="[Command.link(ref('base.group_system')), Command.link(ref('base.group_user'))]"/>
         <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
     </record>
-
-
-
 </odoo>
