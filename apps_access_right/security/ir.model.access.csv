@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"base.access_ir_module_module_group_user","ir_module_module group_user","model_ir_module_module","base.group_system",0,0,0,0
+base_install_request.access_ir_module_module_group_user,ir_module_module group_user,base.model_ir_module_module,base.group_user,0,0,0,0
+"access_ir_module_module_apps_access_group_user","ir_module_module apps_access_group_user","model_ir_module_module","apps_access_right.group_apps_manager",1,1,1,1

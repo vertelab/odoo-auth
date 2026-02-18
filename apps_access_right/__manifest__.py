@@ -14,6 +14,7 @@
     'author': 'Your Company',
     'depends': ['base', 'base_install_request'],
     'data': [
+        'security/ir.model.access.csv',
         'security/security.xml',
         'views/ir_module_module_views.xml',
         'views/menus.xml',
