@@ -2,6 +2,7 @@
 {
     'name': 'Administrator Apps Security',
     'version': '1.0',
+    'license': 'AGPL-3',
     'category': 'Administration',
     'summary': 'Separate Apps installation rights from Settings access',
     'description': """
