@@ -9,7 +9,7 @@
         to login to the first available database.
     ''',
     'author': 'Vertel AB',
-    'website': 'https://www.vertel.se',
+    'website': 'https://vertel.se/apps/odoo-auth/auth_from_basic_http',
     'depends': ['base', 'web'],
     'data': [],
     'installable': True,

@@ -13,6 +13,7 @@
         Critical security feature: Settings users cannot grant Apps privileges.
     """,
     'author': 'Your Company',
+    'website': 'https://vertel.se/apps/odoo-auth/apps_access_right',
     'depends': ['base', 'base_install_request'],
     'data': [
         'security/ir.model.access.csv',
