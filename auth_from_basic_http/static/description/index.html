@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Authentication from HTTP Basic &mdash; Vertel for Odoo</title>
+  <title>Auth: HTTP Basic Authentication &mdash; Vertel for Odoo</title>
   <style>
     :root { --navy:#0F172A; --darkBg:#1E293B; --white:#F8FAFC; --gray:#94A3B8;
              --lightGray:#E2E8F0; --brand:#930a57; --brand2:#8105a7; }
@@ -43,7 +43,7 @@
 </head>
 <body>
 <div class="hero">
-  <h1>Authentication from HTTP Basic</h1>
+  <h1>Auth: HTTP Basic Authentication</h1>
   <p class="subtitle">Authenticate users via HTTP Basic Authentication headers.</p>
   <div class="meta">
     <span>Odoo 18.0</span><span>&middot;</span>
@@ -54,23 +54,28 @@
 <div class="container">
   <section id="overview">
     <h2>Overview</h2>
-    <p>Authenticate users via HTTP Basic Authentication headers.</p>
+    <p>Some integrations — monitoring probes, embedded browsers, kiosk devices, legacy clients — cannot complete an interactive Odoo login form but can send an <code>Authorization: Basic</code> header. This module lets Odoo accept those credentials and establish a normal session.</p>
+    <p>It patches the request session setup so that, for a configurable list of domains, an unauthenticated visitor presenting Basic credentials is logged in automatically. Everything else behaves exactly as stock Odoo.</p>
+    <p><strong>Typical use:</strong> Enable it on databases that must be reachable by clients which only speak HTTP Basic Auth. Restrict the domain list to the specific hosts that need it, so interactive users keep using the regular Odoo login.</p>
   </section>
   <section id="features">
     <h2>Key Features</h2>
     <div class="feature-grid">
-      <div class="feature-card"><h4>Focused improvement</h4><p>A small, targeted improvement to standard Odoo behaviour.</p></div>
+      <div class="feature-card"><h4>Domain-scoped activation</h4><p>Basic Auth is only attempted for hosts listed in the <code>basic_auth_domains</code> config parameter — including wildcard patterns such as <code>*.example.com</code>.</p></div>
+      <div class="feature-card"><h4>Standard session login</h4><p>Credentials are passed to <code>res.users.authenticate()</code>, so normal Odoo sessions, access rights and audit trails apply.</p></div>
+      <div class="feature-card"><h4>Browser challenge</h4><p>When no credentials are present, a <code>401</code> with a <code>WWW-Authenticate</code> header triggers the browser's native Basic Auth prompt.</p></div>
+      <div class="feature-card"><h4>Static files skipped</h4><p>Requests under <code>/static/</code> bypass the check entirely, keeping asset delivery fast and unaffected.</p></div>
     </div>
   </section>
   <section id="screenshots">
     <h2>Module Graphics</h2>
     <div class="screenshots">
       <figure>
-        <img src="icon.png" alt="Authentication from HTTP Basic icon" width="140" height="140">
+        <img src="icon.png" alt="Auth: HTTP Basic Authentication icon" width="140" height="140">
         <figcaption>Icon &mdash; 140 &times; 140 px</figcaption>
       </figure>
       <figure>
-        <img src="banner.png" alt="Authentication from HTTP Basic banner" width="560" height="280">
+        <img src="banner.png" alt="Auth: HTTP Basic Authentication banner" width="560" height="280">
         <figcaption>Banner &mdash; 560 &times; 280 px</figcaption>
       </figure>
     </div>
@@ -92,7 +97,7 @@
   </section>
 </div>
 <footer>
-  <p><strong>Authentication from HTTP Basic</strong> &mdash; by <a href="https://vertel.se">Vertel Sverige AB</a></p>
+  <p><strong>Auth: HTTP Basic Authentication</strong> &mdash; by <a href="https://vertel.se">Vertel Sverige AB</a></p>
   <p><a href="https://vertel.se">vertel.se</a> &middot;
      <a href="mailto:info@vertel.se">info@vertel.se</a></p>
 </footer>

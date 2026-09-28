@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Administrator Apps Security &mdash; Vertel for Odoo</title>
+  <title>Auth: Apps Access Rights &mdash; Vertel for Odoo</title>
   <style>
     :root { --navy:#0F172A; --darkBg:#1E293B; --white:#F8FAFC; --gray:#94A3B8;
              --lightGray:#E2E8F0; --brand:#930a57; --brand2:#8105a7; }
@@ -43,7 +43,7 @@
 </head>
 <body>
 <div class="hero">
-  <h1>Administrator Apps Security</h1>
+  <h1>Auth: Apps Access Rights</h1>
   <p class="subtitle">Separate Apps installation rights from Settings access.</p>
   <div class="meta">
     <span>Odoo 18.0</span><span>&middot;</span>
@@ -54,24 +54,28 @@
 <div class="container">
   <section id="overview">
     <h2>Overview</h2>
-    <p>Separate Apps installation rights from Settings access.</p>
+    <p>In standard Odoo, the right to install, upgrade and uninstall applications is bundled with the broad <i>Settings</i> administrator group. That means anyone who can configure the database can also change which apps are installed — a risky combination in production.</p>
+    <p>This module separates the two concerns. It introduces a dedicated <b>Apps Manager</b> group and gates the three application-lifecycle buttons on <code>ir.module.module</code> behind it, while leaving the rest of the Settings area untouched.</p>
+    <p><strong>Typical use:</strong> Deploy it when you want day-to-day administrators to manage settings, users and configuration without being able to install or remove applications. Application changes are then reserved for a smaller, explicitly trusted group.</p>
   </section>
   <section id="features">
     <h2>Key Features</h2>
     <div class="feature-grid">
-      <div class="feature-card"><h4>Actions</h4><p>Adds button_immediate_install, button_immediate_upgrade, button_immediate_uninstall.</p></div>
-      <div class="feature-card"><h4>UI integration</h4><p>Extends 2 view(s) in the Odoo interface.</p></div>
+      <div class="feature-card"><h4>Dedicated Apps Manager group</h4><p>A new <code>group_apps_manager</code> group controls who may install applications, independent of Settings access.</p></div>
+      <div class="feature-card"><h4>Guarded lifecycle buttons</h4><p><code>button_immediate_install</code>, <code>button_immediate_upgrade</code> and <code>button_immediate_uninstall</code> all raise an <code>AccessError</code> unless the user is an Apps Manager.</p></div>
+      <div class="feature-card"><h4>Superuser bypass</h4><p>The check is skipped for the superuser (<code>env.su</code>), so automated and system operations keep working.</p></div>
+      <div class="feature-card"><h4>Menu lock-down</h4><p>The Apps and Apps-management menus are restricted to the Apps Manager group so the UI matches the permission model.</p></div>
     </div>
   </section>
   <section id="screenshots">
     <h2>Module Graphics</h2>
     <div class="screenshots">
       <figure>
-        <img src="icon.png" alt="Administrator Apps Security icon" width="140" height="140">
+        <img src="icon.png" alt="Auth: Apps Access Rights icon" width="140" height="140">
         <figcaption>Icon &mdash; 140 &times; 140 px</figcaption>
       </figure>
       <figure>
-        <img src="banner.png" alt="Administrator Apps Security banner" width="560" height="280">
+        <img src="banner.png" alt="Auth: Apps Access Rights banner" width="560" height="280">
         <figcaption>Banner &mdash; 560 &times; 280 px</figcaption>
       </figure>
     </div>
@@ -93,7 +97,7 @@
   </section>
 </div>
 <footer>
-  <p><strong>Administrator Apps Security</strong> &mdash; by <a href="https://vertel.se">Vertel Sverige AB</a></p>
+  <p><strong>Auth: Apps Access Rights</strong> &mdash; by <a href="https://vertel.se">Vertel Sverige AB</a></p>
   <p><a href="https://vertel.se">vertel.se</a> &middot;
      <a href="mailto:info@vertel.se">info@vertel.se</a></p>
 </footer>

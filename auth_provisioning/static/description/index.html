@@ -54,12 +54,17 @@
 <div class="container">
   <section id="overview">
     <h2>Overview</h2>
-    <p>Auth Provisioning.</p>
+    <p>Rolling out accounts to staff usually means getting an invitation or password-reset link to each person reliably. Copying long URLs around is error-prone; scanning a QR code from a phone is not.</p>
+    <p>This module extends <code>res.users</code> with the user's signup URL and generates QR codes for it on the fly, both for the configured base URL and for the personalised signup link. The links are surfaced directly on the user form and in the user's preferences.</p>
+    <p><strong>Typical use:</strong> Use it during onboarding and support: open a user, scan the QR code with a phone, and hand the device to the person who needs to set or reset their password — no link copying, no typos.</p>
   </section>
   <section id="features">
     <h2>Key Features</h2>
     <div class="feature-grid">
-      <div class="feature-card"><h4>UI integration</h4><p>Extends 2 view(s) in the Odoo interface.</p></div>
+      <div class="feature-card"><h4>Signup URL on the user</h4><p>A computed <code>signup_url</code> field derives the personalised invitation/reset link from the user's partner.</p></div>
+      <div class="feature-card"><h4>On-the-fly QR codes</h4><p><code>create_url_qrcode()</code> renders PNG QR codes (via <code>pyqrcode</code>) for both the base URL and the signup URL, returned as binary fields.</p></div>
+      <div class="feature-card"><h4>Device Management tab</h4><p>A <i>Device Management</i> page on the user preferences form shows the signup URL together with its QR code for quick scanning.</p></div>
+      <div class="feature-card"><h4>Invitation / reset banner</h4><p>On the user form, a banner shows the invitation link for new users and the reset link for active users, so the right link is always at hand.</p></div>
     </div>
   </section>
   <section id="screenshots">
