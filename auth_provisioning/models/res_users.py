@@ -40,7 +40,10 @@ class ResUsers(models.Model):
             buffer = io.BytesIO()
             qr = pyqrcode.create(sign_up_link) #getsignupurl
             qr.png(buffer, scale=3)
-            record.qrcode_signup_url = base64.b64encode(buffer.getvalue()).decode('utf-8')  # Encode to base64 and decode to string
+            # 20.0: Binary-falt tar radata (bytes), inte base64-text. Skickas
+            # base64-strangen lagras den som binardata och avkodningen ger
+            # UnicodeDecodeError: 'utf-8' codec can't decode byte 0x89.
+            record.qrcode_signup_url = buffer.getvalue()
             
  
     def set_base_url(self):
