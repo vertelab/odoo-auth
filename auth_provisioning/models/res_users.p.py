@@ -1,4 +1,7 @@
 from odoo import models, fields, api, _
+# #if VERSION >= "20.0"
+from odoo.tools import BinaryBytes
+# #endif
 from odoo.exceptions import UserError, AccessError, ValidationError
 import logging
 
@@ -41,10 +44,11 @@ class ResUsers(models.Model):
             qr = pyqrcode.create(sign_up_link) #getsignupurl
             qr.png(buffer, scale=3)
             # #if VERSION >= "20.0"
-            # 20.0: Binary-falt tar radata (bytes), inte base64-text. Skickas
+            # 20.0: Binary-faltet tar ett BinaryValue, inte base64-text och
+            # inte rå bytes ("use BinaryValue instead of bytes"). Skickas
             # base64-strangen lagras den som binardata och avkodningen ger
             # UnicodeDecodeError: 'utf-8' codec can't decode byte 0x89.
-            record.qrcode_signup_url = buffer.getvalue()
+            record.qrcode_signup_url = BinaryBytes(buffer.getvalue(), 'qrcode.png')
             # #else
             record.qrcode_signup_url = base64.b64encode(buffer.getvalue()).decode('utf-8')  # Encode to base64 and decode to string
             # #endif
