@@ -45,6 +45,7 @@ class ResUsers(models.Model):
  
     def set_base_url(self):
         for record in self:
-            record.base_url_parameter = self.env['ir.config_parameter'].sudo().get_param(
+            # get_param togs bort i 20.0; get_str ar dess ersattare.
+            record.base_url_parameter = self.env['ir.config_parameter'].sudo().get_str(
                 'web.base.url', 'Hittade inte web.base.url'
             )
