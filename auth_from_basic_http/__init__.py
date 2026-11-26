@@ -1,7 +1,7 @@
 import base64
 import logging
 from odoo.modules.registry import Registry
-from odoo.http import db_list, request, Response
+from odoo.http import request, Response
 from odoo.tools.config import config
 
 _logger = logging.getLogger(__name__)
@@ -54,29 +54,34 @@ def send_auth_challenge():
     })
 
 
-# Patch the session setup
+# Patch the session setup.
+#
+# 18.0/19.0: Request._get_session_and_dbname() är en metod på Request.
+# 20.0:      router._set_session_and_dbname(request) är en modulnivå-funktion
+#            som sätter request.session och request.db. Metoden finns inte
+#            kvar, så patchen måste läggas på funktionen i stället.
 try:
-    from odoo.http import Request
+    from odoo.http import router as _http_router
 
-    original_get_session = Request._get_session_and_dbname
+    _original_set_session_and_dbname = _http_router._set_session_and_dbname
+
+    def _patched_set_session_and_dbname(req):
+        _original_set_session_and_dbname(req)
+        _basic_auth_after_session(req)
+        return None
 
 
-    def patched_get_session_and_dbname(self):
-        session, dbname = original_get_session(self)
-
+    def _basic_auth_after_session(req):
         # Skip for static files
-        if '/static/' in self.httprequest.path:
-            return session, dbname
-
-        # Ensure request object has session available for get_basic_auth_credentials()
-        request.session = session
+        if '/static/' in req.httprequest.path:
+            return
 
         # Check if this domain requires Basic Auth
         if not domain_requires_basic_auth():
-            return session, dbname
+            return
 
         # If not logged in and have database
-        if not session.uid and dbname:
+        if not req.session.uid and req.db:
             username, password = get_basic_auth_credentials()
 
             if not username:
@@ -84,15 +89,18 @@ try:
                 from werkzeug.exceptions import Unauthorized
                 raise Unauthorized(response=send_auth_challenge())
 
-            # Try to login using session.authenticate (the correct way)
+            # Try to login using res.users.authenticate (the correct way)
             try:
                 _logger.info(f"Attempting Basic Auth login for user: {username}")
 
-                # Use the correct credentials format for session.authenticate
+                # Use the correct credentials format for authenticate
                 credential = {'login': username, 'password': password, 'type': 'password'}
-                registry = Registry(dbname)
+                registry = Registry(req.db)
                 user_agent_env = {}
-                uid = registry['res.users'].authenticate(dbname, credential, {**user_agent_env, 'interactive': False})
+                # 20.0: authenticate(credential, user_agent_env) — db läses ur
+                # registryt, inte ur ett argument.
+                auth_info = registry['res.users'].authenticate(credential, {**user_agent_env, 'interactive': False})
+                uid = auth_info and auth_info.get('uid')
 
                 if uid:
                     _logger.info(f"Basic Auth login successful: {username}")
@@ -106,9 +114,7 @@ try:
                 from werkzeug.exceptions import Unauthorized
                 raise Unauthorized(response=send_auth_challenge())
 
-        return session, dbname
-
-    Request._get_session_and_dbname = patched_get_session_and_dbname
+    _http_router._set_session_and_dbname = _patched_set_session_and_dbname
     _logger.info("Basic Auth module loaded successfully")
 
 except Exception as e:
