@@ -1,0 +1,66 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* auth_provisioning
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0-20250901\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-02 07:48+0000\n"
+"PO-Revision-Date: 2025-09-02 09:51+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#. module: auth_provisioning
+#: model_terms:ir.ui.view,arch_db:auth_provisioning.res_users_view_form_auth_provisioning
+msgid ""
+"<strong>A password reset has been requested for this user. An email "
+"containing the following link has been sent:</strong>"
+msgstr ""
+"<strong>En lösenordsåterställning har begärts för den här användaren. Ett "
+"e-postmeddelande med följande länk har skickats:</strong>"
+
+#. module: auth_provisioning
+#: model_terms:ir.ui.view,arch_db:auth_provisioning.res_users_view_form_auth_provisioning
+msgid ""
+"<strong>An invitation email containing the following subscription link has "
+"been sent:</strong>"
+msgstr ""
+"<strong>En inbjudan via e-post med följande prenumerationslänk har "
+"skickats:</strong>"
+
+#. module: auth_provisioning
+#: model:ir.model.fields,field_description:auth_provisioning.field_res_users__base_url_parameter
+msgid "Base Url Parameter"
+msgstr "Base Url Parameter"
+
+#. module: auth_provisioning
+#: model_terms:ir.ui.view,arch_db:auth_provisioning.res_users_view_form_auth_provisioning
+msgid "Close"
+msgstr "Stäng"
+
+#. module: auth_provisioning
+#: model:ir.model.fields,field_description:auth_provisioning.field_res_users__qrcode_base_url
+msgid "Qrcode Base Url"
+msgstr "Qrcode Bas Url"
+
+#. module: auth_provisioning
+#: model:ir.model.fields,field_description:auth_provisioning.field_res_users__qrcode_signup_url
+msgid "Qrcode Signup Url"
+msgstr "Qrcode Registrerings-Url"
+
+#. module: auth_provisioning
+#: model:ir.model.fields,field_description:auth_provisioning.field_res_users__signup_url
+msgid "Signup URL"
+msgstr "Registrerings-URL"
+
+#. module: auth_provisioning
+#: model:ir.model,name:auth_provisioning.model_res_users
+msgid "User"
+msgstr "Användare"
