@@ -32,7 +32,13 @@ Administrator Apps Security
     'website': 'https://vertel.se/apps/odoo-auth/apps_access_right',
     'depends': ['base', 'base_install_request'],
     'data': [
+        # Odoo 20 bytte form OCH filnamn pa ir.model.access -> ir.access.
+        # Filnamnet bestammer modellen, sa ratt fil maste listas per utgave.
+        # #if VERSION >= "20.0"
+        'security/ir.access.csv',
+        # #else
         'security/ir.model.access.csv',
+        # #endif
         'security/security.xml',
         'views/ir_module_module_views.xml',
         'views/menus.xml',

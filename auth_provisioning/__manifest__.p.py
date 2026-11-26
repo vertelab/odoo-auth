@@ -50,6 +50,11 @@
     'data': [
         'views/views.xml',
         'data/email_templates.xml',
+        # #if VERSION >= "20.0"
+        'security/ir.access.csv',
+        # #else
+        'security/ir.model.access.csv',
+        # #endif
     ],
     'demo': [],
     'application': False,
