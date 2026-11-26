@@ -64,8 +64,8 @@
                         Never heard of Odoo? It’s an all-in-one business software loved by 7+ million users. It will considerably improve your experience at work and increase your productivity.
                         <br /><br />
                         <!-- 20.0: qrcode_signup_url ar ett BinaryValue, inte base64-text.
-                             base64 finns inte i QWeb-kontexten - importera i uttrycket. -->
-                        <img t-attf-src="data:image/png;base64,{{__import__('base64').b64encode(object.qrcode_signup_url.content).decode()}}"/>
+                             Modulen lamnar en fardig datastrang i qrcode_signup_data. -->
+                        <img t-attf-src="{{object.qrcode_signup_data}}"/>
                         <br /><br />
                         Have a look at the <a href="https://www.odoo.com/page/tour?utm_source=db&amp;utm_medium=auth" style="color: #875A7B;">Odoo Tour</a> to discover the tool.
                         <br /><br />

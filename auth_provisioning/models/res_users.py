@@ -14,6 +14,10 @@ class ResUsers(models.Model):
     base_url_parameter = fields.Char(compute="set_base_url")
     qrcode_base_url = fields.Binary(compute="create_url_qrcode", store=False, readonly=False)
     qrcode_signup_url = fields.Binary(compute="create_url_qrcode", store=False, readonly=False)
+    # 20.0: Binary-faltet haller ett BinaryValue. Mallen behover base64-text,
+    # och QWeb-kontexten har varken base64 eller __import__ - sa modulen
+    # lamnar en fardig datastrang sjalv.
+    qrcode_signup_data = fields.Char(compute="create_url_qrcode", store=False)
 
     @api.depends('partner_id')
     def _compute_signup_url(self):
@@ -46,6 +50,7 @@ class ResUsers(models.Model):
             # base64-strangen lagras den som binardata och avkodningen ger
             # UnicodeDecodeError: 'utf-8' codec can't decode byte 0x89.
             record.qrcode_signup_url = BinaryBytes(buffer.getvalue(), 'qrcode.png')
+            record.qrcode_signup_data = 'data:image/png;base64,' + base64.b64encode(buffer.getvalue()).decode()
             
  
     def set_base_url(self):
