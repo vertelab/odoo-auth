@@ -42,6 +42,7 @@
     'data': [
         'views/views.xml',
         'data/email_templates.xml',
+        'security/ir.model.access.csv',
     ],
     'demo': [],
     'application': False,
