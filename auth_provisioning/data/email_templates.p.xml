@@ -69,8 +69,8 @@
                         <br /><br />
                         <!-- #if VERSION >= "20.0" -->
                         <!-- 20.0: qrcode_signup_url ar ett BinaryValue, inte base64-text.
-                             base64 finns inte i QWeb-kontexten - importera i uttrycket. -->
-                        <img t-attf-src="data:image/png;base64,{{__import__('base64').b64encode(object.qrcode_signup_url.content).decode()}}"/>
+                             Modulen lamnar en fardig datastrang i qrcode_signup_data. -->
+                        <img t-attf-src="{{object.qrcode_signup_data}}"/>
                         <!-- #else -->
                         <img t-attf-src="data:image/*;base64,{{object.qrcode_signup_url}}"/>
                         <!-- #endif -->
