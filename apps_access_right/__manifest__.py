@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Auth: Apps Access Rights',
-    'version': '19.0.1.0.0',
+    'version': '20.0.1.0.0',
     'license': 'AGPL-3',
     'category': 'Administration',
     'summary': 'Separate Apps installation rights from Settings access.',
@@ -24,7 +24,9 @@ Administrator Apps Security
     'website': 'https://vertel.se/apps/odoo-auth/apps_access_right',
     'depends': ['base', 'base_install_request'],
     'data': [
-        'security/ir.model.access.csv',
+        # Odoo 20 bytte form OCH filnamn pa ir.model.access -> ir.access.
+        # Filnamnet bestammer modellen, sa ratt fil maste listas per utgave.
+        'security/ir.access.csv',
         'security/security.xml',
         'views/ir_module_module_views.xml',
         'views/menus.xml',
