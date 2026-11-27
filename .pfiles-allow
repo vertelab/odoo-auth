@@ -1,9 +1,0 @@
-apps_access_right/models/ir_module_module.py
-apps_access_right/static/description/index.html
-apps_access_right/views/ir_module_module_views.xml
-auth_from_basic_http/static/description/index.html
-auth_provisioning/data/demo_data.xml
-auth_provisioning/demo/demo.xml
-auth_provisioning/static/description/index.html
-auth_provisioning/views/templates.xml
-auth_provisioning/views/views.xml
