@@ -1,6 +1,6 @@
 {
     'name': 'Authentication from HTTP Basic',
-    'version': '19.0.1.0.0',
+    'version': '18.0.1.0.0',
     'category': 'Authentication',
     'summary': 'Authenticate users via HTTP Basic Authentication headers',
     'description': '''
