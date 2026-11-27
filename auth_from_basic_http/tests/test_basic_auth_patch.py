@@ -21,9 +21,16 @@ class TestBasicAuthPatch(TransactionCase):
         20.0 it is router._set_session_and_dbname. Whichever exists must be
         the module's own function, not the original.
         """
-        from odoo.http import Request
+        # 18.0/19.0 expose Request from odoo.http; 20.0 moved it to
+        # odoo.http.requestlib and patches the module-level function in
+        # odoo.http.router instead. Try both, in that order.
+        try:
+            from odoo.http import Request
 
-        patched = getattr(Request, "_get_session_and_dbname", None)
+            patched = getattr(Request, "_get_session_and_dbname", None)
+        except ImportError:
+            patched = None
+
         if patched is not None:
             self.assertEqual(
                 patched.__name__,
