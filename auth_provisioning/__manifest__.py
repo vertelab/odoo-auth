@@ -23,7 +23,7 @@
 #
 {
     'name': 'Auth: Provisioning',
-    'version': '18.0.1.0.0',
+    'version': '20.0.1.0.0',
     'summary': """
         Auth Provisioning""",
     'category': '', # Technical Settings|Localization|Payroll Localization|Account Charts|User types|Invoicing|Sales|Human Resources|Operations|Marketing|Manufacturing|Website|Theme|Administration|Appraisals|Sign|Helpdesk|Administration|Extra Rights|Other Extra Rights|
@@ -42,7 +42,7 @@
     'data': [
         'views/views.xml',
         'data/email_templates.xml',
-        'security/ir.model.access.csv',
+        'security/ir.access.csv',
     ],
     'demo': [],
     'application': False,

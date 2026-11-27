@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Auth: Apps Access Rights',
-    'version': '18.0.1.0.0',
+    'version': '20.0.1.0.0',
     'license': 'AGPL-3',
     'category': 'Administration',
     'summary': 'Separate Apps installation rights from Settings access.',
@@ -30,7 +30,7 @@ Administrator Apps Security
         'security/security.xml',
         # Odoo 20 bytte form OCH filnamn pa ir.model.access -> ir.access.
         # Filnamnet bestammer modellen, sa ratt fil maste listas per utgave.
-        'security/ir.model.access.csv',
+        'security/ir.access.csv',
         'views/ir_module_module_views.xml',
         'views/menus.xml',
     ],

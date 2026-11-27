@@ -57,13 +57,15 @@
                                 Accept invitation
                             </a>
                         </div>
-                        <b>  This link will remain valid during <t t-out="int(int(object.env['ir.config_parameter'].sudo().get_param('auth_signup.signup.validity.hours',144))/24)"></t> days </b> <br/>
+                        <b>  This link will remain valid during <t t-out="int(int(object.env['ir.config_parameter'].sudo().get_int('auth_signup.signup.validity.hours',144))/24)"></t> days </b> <br/>
                         <t t-set="website_url" t-value="object.get_base_url()"></t>
                         Your Odoo domain is: <b><a t-att-href='website_url' t-out="website_url or ''">http://yourcompany.odoo.com</a></b><br />
                         Your sign in email is: <b><a t-attf-href="/web/login?login={{ object.email }}" target="_blank" t-out="object.email or ''">mark.brown23@example.com</a></b><br /><br />
                         Never heard of Odoo? It’s an all-in-one business software loved by 7+ million users. It will considerably improve your experience at work and increase your productivity.
                         <br /><br />
-                        <img t-attf-src="data:image/*;base64,{{object.qrcode_signup_url}}"/>
+                        <!-- 20.0: qrcode_signup_url ar ett BinaryValue, inte base64-text.
+                             Modulen lamnar en fardig datastrang i qrcode_signup_data. -->
+                        <img t-attf-src="{{object.qrcode_signup_data}}"/>
                         <br /><br />
                         Have a look at the <a href="https://www.odoo.com/page/tour?utm_source=db&amp;utm_medium=auth" style="color: #875A7B;">Odoo Tour</a> to discover the tool.
                         <br /><br />
