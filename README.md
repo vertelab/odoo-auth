@@ -37,6 +37,9 @@ preprocess -f -D VERSION=18.0 -o <utdata> <p-fil>
 python3 .github/pfiles-check.py --version 18.0 .
 ```
 
+**Varje källfil har en p-källa.** Repot har ingen `.pfiles-allow` — vitlistan
+är tom, så grinden mäter allt. En ny fil ska p-filas, inte vitlistas.
+
 Två saker som skiljer sig mellan utgåvorna och som därför står i p-filerna:
 
 | Ändring | 18.0 / 19.0 | 20.0 |
