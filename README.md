@@ -13,7 +13,7 @@ användarprovisionering.
 
 ## Portstatus
 
-Samma kod på alla tre utgåvor, via p-filer. Status avser **den här grenen** (`20.0`).
+Samma kod på alla tre utgåvor, via p-filer. Status avser **den här grenen**.
 
 | Modul | Utgåva | Installerad | Test | Blockerare |
 |---|---|---|---|---|
@@ -36,6 +36,9 @@ preprocess -f -D VERSION=20.0 -o <utdata> <p-fil>
 # grinden (körs även av .githooks/pre-commit och av CI)
 python3 .github/pfiles-check.py --version 20.0 .
 ```
+
+**Varje källfil har en p-källa.** Repot har ingen `.pfiles-allow` — vitlistan
+är tom, så grinden mäter allt. En ny fil ska p-filas, inte vitlistas.
 
 Två saker som skiljer sig mellan utgåvorna och som därför står i p-filerna:
 
