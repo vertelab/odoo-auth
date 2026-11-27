@@ -21,7 +21,7 @@ Samma kod på alla tre utgåvor, via p-filer. Status avser **den här grenen** (
 | `auth_from_basic_http` | 19.0 | ✅ `installed` | ✅ grön | — |
 | `auth_provisioning` | 19.0 | ✅ `installed` | ✅ grön | — |
 
-Verifierat i `tst_auth_19.0` med `ir_module_module.state = 'installed'` — inte
+Verifierat i `tst_auth_19` med `ir_module_module.state = 'installed'` — inte
 med en exitkod — och 17 tester körda med `--test-tags` mot alla tre moduler.
 
 ## Så skrivs koden
@@ -54,7 +54,7 @@ kommentarsyntax efter filtyp, och `# #if` i en `.xml` lämnas orörd.
 ## Tester
 
 ```bash
-odoo-bin -c /etc/odoo/pfile/19.0/odoo.conf -d tst_auth_19.0 \
+odoo-bin -c /etc/odoo/pfile/19.0/odoo.conf -d tst_auth_19 \
   -u apps_access_right,auth_from_basic_http,auth_provisioning \
   --test-tags=/apps_access_right,/auth_from_basic_http,/auth_provisioning \
   --workers 0 --stop-after-init
