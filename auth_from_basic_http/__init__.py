@@ -61,14 +61,14 @@ def send_auth_challenge():
 #            som sätter request.session och request.db. Metoden finns inte
 #            kvar, så patchen måste läggas på funktionen i stället.
 try:
-    from odoo.http import router as _http_router
+    from odoo.http import Request
 
-    _original_set_session_and_dbname = _http_router._set_session_and_dbname
+    _original_set_session_and_dbname = Request._get_session_and_dbname
 
     def _patched_set_session_and_dbname(req):
-        _original_set_session_and_dbname(req)
+        session, dbname = _original_set_session_and_dbname(req)
         _basic_auth_after_session(req)
-        return None
+        return session, dbname
 
 
     def _basic_auth_after_session(req):
@@ -97,9 +97,7 @@ try:
                 credential = {'login': username, 'password': password, 'type': 'password'}
                 registry = Registry(req.db)
                 user_agent_env = {}
-                # 20.0: authenticate(credential, user_agent_env) — db läses ur
-                # registryt, inte ur ett argument.
-                auth_info = registry['res.users'].authenticate(credential, {**user_agent_env, 'interactive': False})
+                auth_info = registry['res.users'].authenticate(req.db, credential, {**user_agent_env, 'interactive': False})
                 uid = auth_info and auth_info.get('uid')
 
                 if uid:
@@ -114,7 +112,7 @@ try:
                 from werkzeug.exceptions import Unauthorized
                 raise Unauthorized(response=send_auth_challenge())
 
-    _http_router._set_session_and_dbname = _patched_set_session_and_dbname
+    Request._get_session_and_dbname = _patched_set_session_and_dbname
     _logger.info("Basic Auth module loaded successfully")
 
 except Exception as e:
