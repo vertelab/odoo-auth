@@ -52,9 +52,10 @@ class TestSignupUrl(TransactionCase):
         On 20.0 get_param was removed; the module uses get_str. If the
         wrong accessor is used the field falls back to the error string.
         """
-        self.env["ir.config_parameter"].sudo().set_param(
-            "web.base.url", "https://example.test"
-        )
+        icp = self.env["ir.config_parameter"].sudo()
+        # set_param was renamed in 20.0; pick whichever the edition has.
+        setter = getattr(icp, "set_param", None) or icp.set_str
+        setter("web.base.url", "https://example.test")
         self.assertEqual(
             self.user.base_url_parameter,
             "https://example.test",
