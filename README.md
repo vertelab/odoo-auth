@@ -1,30 +1,72 @@
-# odoo-auth — gren 19.0
+# odoo-auth
 
-> **Denna gren är avsiktligt tom.** Modulerna är INTE portade till Odoo 19.
-> Grenen finns så att dev-miljöer (`hansolo19`) kan klona den utan att falla,
-> men den påstår ingenting om att koden är portad.
-
-## Baseline
-
-| | |
-|---|---|
-| Källa | `20.0` |
-| Moduler | **3** |
-| Grenar i repot | `10.0`, `12.0`, `12.0-af`, `12.0-test`, `13.0`, `14.0`, `17.0`, `18.0`, `20.0`, `Dev-12.0`, `Dev-12.0-Fenix-Sprint-02`, `master` |
+Autentiseringstillägg för Odoo: applikationsrättigheter, HTTP Basic Auth och
+användarprovisionering.
 
 ## Moduler
 
-- `apps_access_right`
-- `auth_from_basic_http`
-- `auth_provisioning`
+| Modul | Vad den gör |
+|---|---|
+| `apps_access_right` | Skiljer rätten att **installera appar** från rätten att **administrera inställningar**. En Settings-administratör utan Apps-gruppen nekas install/upgrade/uninstall. |
+| `auth_from_basic_http` | Autentiserar via `Authorization: Basic`-headern för konfigurerade domäner (`basic_auth_domains`). |
+| `auth_provisioning` | Beräknar inbjudnings-/återställningslänken (`signup_url`) och en QR-kod för mobila enheter. |
 
-## Blockerare
+## Portstatus
 
-✅ Inga externa beroenden saknas i Odoo 19-kärnan eller OCA 19.0.
+Samma kod på alla tre utgåvor, via p-filer. Status avser **den här grenen** (`19.0`).
 
-Modulerna kan troligen portas utan att vänta på externa bidrag.
+| Modul | Utgåva | Installerad | Test | Blockerare |
+|---|---|---|---|---|
+| `apps_access_right` | 19.0 | ✅ `installed` | ✅ grön | — |
+| `auth_from_basic_http` | 19.0 | ✅ `installed` | ✅ grön | — |
+| `auth_provisioning` | 19.0 | ✅ `installed` | ✅ grön | — |
 
-## Nästa steg
+Verifierat i `tst_auth_19.0` med `ir_module_module.state = 'installed'` — inte
+med en exitkod — och 17 tester körda med `--test-tags` mot alla tre moduler.
 
-Portering sker på `*-pfile`-maskin med versionsagnostisk kod
-(`.p.py` / `.p.xml`). Se `/skill:odoo-pfiles`.
+## Så skrivs koden
+
+En källfil per logisk fil, `*.p.py` / `*.p.xml` / `*.p.csv`. Expansionen för
+grenens utgåva committas. Redigera **p-filen**, aldrig utdatan.
+
+```bash
+# expandera för grenens utgåva
+preprocess -f -D VERSION=19.0 -o <utdata> <p-fil>
+
+# grinden (körs även av .githooks/pre-commit och av CI)
+python3 .github/pfiles-check.py --version 19.0 .
+```
+
+Två saker som skiljer sig mellan utgåvorna och som därför står i p-filerna:
+
+| Ändring | 18.0 / 19.0 | 20.0 |
+|---|---|---|
+| Säkerhetsfil | `security/ir.model.access.csv` (`perm_*`) | `security/ir.access.csv` (`operation`, `domain`) |
+| `res.groups`-medlemmar | `users` | `user_ids` |
+| `ir.ui.menu`-grupper | `groups_id` | `group_ids` |
+| `ir.config_parameter` | `get_param` / `set_param` | `get_int` / `get_str` / `set_str` |
+| `Binary`-fält | base64-text | `BinaryValue` |
+| Session-patch | `Request._get_session_and_dbname` | `router._set_session_and_dbname` |
+
+**XML-direktiv skrivs `<!-- #if -->`**, inte `# #if` — `preprocess` väljer
+kommentarsyntax efter filtyp, och `# #if` i en `.xml` lämnas orörd.
+
+## Tester
+
+```bash
+odoo-bin -c /etc/odoo/pfile/19.0/odoo.conf -d tst_auth_19.0 \
+  -u apps_access_right,auth_from_basic_http,auth_provisioning \
+  --test-tags=/apps_access_right,/auth_from_basic_http,/auth_provisioning \
+  --workers 0 --stop-after-init
+```
+
+`--workers 0` krävs: i worker-läge startar inga tester.
+
+Räkna `FAIL:` och `ERROR: Test` i loggen — inte `ERROR:` och inte exitkoden.
+En mall som inte renderar skriver `ERROR:` utan att vara ett testfel.
+
+## Källor
+
+- `docs/pfiles-ci.md` — grinden, de fem filerna, utgåvematrisen
+- `docs/pfiles-security-csv.md` — säkerhetsfilen 18/19 vs 20
+- `/skill:odoo-pfiles` — p-filer och de elva fällorna
